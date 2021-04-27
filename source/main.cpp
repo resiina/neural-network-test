@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 
 #include "bitmap.h"
 
@@ -8,22 +9,20 @@
 
 int main()
 {
+    std::srand(std::time(nullptr));
+    
+    // -----------------------------------------------------
     Bitmap testBitmap;
-    testBitmap.open("data/testBitmap.bmp");
+    testBitmap.open("data/1.bmp");
 
-    PixelMatrix pixelRows = testBitmap.toPixelMatrix();
+    PixelMatrix pixelMatrix = testBitmap.toPixelMatrix();
 
-    int pixelCount = 0;
+    int height = pixelMatrix.size();
+    int width = pixelMatrix.at(0).size();
 
-    for (const auto & pixelRow : pixelRows)
-    {
-        for (const auto & pixel : pixelRow)
-        {
-            pixelCount = pixelRow.size() * pixelRows.size();
+    int pixelCount = width * height;
 
-            //std::cout << std::to_string(pixel.blue) << std::endl;
-        }
-    }
+    // -----------------------------------------------------
 
     NeuralNetwork network;
 
@@ -54,8 +53,8 @@ int main()
             Neuron* neuron = new Neuron;
 
             // Initialize each neuron with random values
-            const double activation = (rand() % 100) / 100.0;
-            const double bias = (rand() % 100) / 100.0;
+            const double activation = (std::rand() % 100) / 100.0;
+            const double bias = (std::rand() % 100) / 100.0;
             neuron->setActivation(activation);
             neuron->setBias(bias);
 
@@ -70,36 +69,40 @@ int main()
     network.connectLayers();
 
     NeuronLayer* inputLayer = network.getNeuronLayer(0);
-    
-    /*
-    for (int y = 0; y < image.height(); y++)
-    {
-        for (int x = 0; x < image.width(); x++)
-        {
-            QRgb pixelColor = image.pixel(x, y);
-            const int r = qRed(pixelColor);
-            const int g = qGreen(pixelColor);
-            const int b = qBlue(pixelColor);
-            const double activation = qGray(r, g, b) / 255.0;
 
-            unsigned int neuronIndex = static_cast<unsigned int>(image.width() * y + x);
+    std::cout << std::setprecision(2);
+
+    int y = 0;
+    for (const auto & pixelRow : pixelMatrix)
+    {
+        int x = 0;
+        for (const auto & pixel : pixelRow)
+        {
+            const int r = pixel.red;
+            const int g = pixel.green;
+            const int b = pixel.blue;
+            const double activation =  (r + g + b) / 3.0 / 255.0; // [0, 1]
+
+            unsigned int neuronIndex = static_cast<unsigned int>(width * y + x);
             Neuron* neuron = inputLayer->getNeuron(neuronIndex);
             neuron->setActivation(activation);
 
-            std::cout << neuron->getActivation() << "\t";
+            if (activation != 1.0)
+            {
+                std::cout << activation;
+            }
+            else
+            {
+                std::cout << " ";
+            }
+
+            std::cout << "\t";
+            x++;
         }
+        
         std::cout << std::endl;
+        y++;
     }
-    */
-
-
-
-
-
-
-
-
-
 
     return 0;
 }

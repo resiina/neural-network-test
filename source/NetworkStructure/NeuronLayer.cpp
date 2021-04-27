@@ -37,7 +37,7 @@ void NeuronLayer::clear()
 
 void NeuronLayer::connectNextLayerNeurons(NeuronLayer* nextLayer)
 {
-    std::cout << myNeurons.size() << std::endl;
+    std::cout << "Neuron count: " << myNeurons.size() << std::endl;
 
     for (auto neuron : myNeurons)
     {
