@@ -2,11 +2,28 @@ cmake_minimum_required(VERSION 3.10)
 
 project(NeuralNetworkTest)
 
-add_executable(NeuralNetworkTestApp
+aux_source_directory(source applicationSources)
+aux_source_directory(source/NetworkStructure applicationSources)
+
+list(APPEND applicationIncludeDirectories
+    source
+    source/NetworkStructure
+)
+
+list(APPEND externalSources
     external/Bitmap/bitmap.cpp
-    source/main.cpp
+)
+
+list(APPEND externalIncludeDirectories
+    external/Bitmap
+)
+
+add_executable(NeuralNetworkTestApp
+    ${applicationSources}
+    ${externalSources}
 )
 
 include_directories(NeuralNetworkTestApp
-    external/Bitmap
+    ${applicationIncludeDirectories}
+    ${externalIncludeDirectories}
 )

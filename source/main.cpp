@@ -13,7 +13,7 @@ int main()
     {
         for (const auto & pixel : row)
         {
-            std::cout << std::to_string(pixel.blue) << std::endl;
+            //std::cout << std::to_string(pixel.blue) << std::endl;
         }
     }
 
