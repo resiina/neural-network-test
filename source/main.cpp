@@ -78,13 +78,10 @@ int main()
         int x = 0;
         for (const auto & pixel : pixelRow)
         {
-            const int r = pixel.red;
-            const int g = pixel.green;
-            const int b = pixel.blue;
-            const double activation =  (r + g + b) / 3.0 / 255.0; // [0, 1]
-
             unsigned int neuronIndex = static_cast<unsigned int>(width * y + x);
             std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
+
+            const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
             neuron->setActivation(activation);
 
             if (activation != 1.0)
