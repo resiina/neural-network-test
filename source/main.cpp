@@ -9,7 +9,7 @@
 
 int main()
 {
-    std::srand(std::time(nullptr));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
     
     // -----------------------------------------------------
     Bitmap testBitmap;
@@ -17,10 +17,10 @@ int main()
 
     PixelMatrix pixelMatrix = testBitmap.toPixelMatrix();
 
-    int height = pixelMatrix.size();
-    int width = pixelMatrix.at(0).size();
+    size_t height = pixelMatrix.size();
+    size_t width = pixelMatrix.at(0).size();
 
-    int pixelCount = width * height;
+    size_t pixelCount = width * height;
 
     // -----------------------------------------------------
 
@@ -30,8 +30,8 @@ int main()
 
     for (int i = 0; i < layerCount; i++)
     {
-        NeuronLayer* layer = new NeuronLayer;
-        int neuronCount = 0;
+        std::shared_ptr<NeuronLayer> layer = std::make_shared<NeuronLayer>();
+        size_t neuronCount = 0;
         if (i == 0)
         {
             // Input layer
@@ -50,7 +50,7 @@ int main()
 
         for (int j = 0; j < neuronCount; j++)
         {
-            Neuron* neuron = new Neuron;
+            std::shared_ptr<Neuron> neuron = std::make_shared<Neuron>();
 
             // Initialize each neuron with random values
             const double activation = (std::rand() % 100) / 100.0;
@@ -68,7 +68,7 @@ int main()
 
     network.connectLayers();
 
-    NeuronLayer* inputLayer = network.getNeuronLayer(0);
+    std::shared_ptr<NeuronLayer> inputLayer = network.getNeuronLayer(0);
 
     std::cout << std::setprecision(2);
 
@@ -84,7 +84,7 @@ int main()
             const double activation =  (r + g + b) / 3.0 / 255.0; // [0, 1]
 
             unsigned int neuronIndex = static_cast<unsigned int>(width * y + x);
-            Neuron* neuron = inputLayer->getNeuron(neuronIndex);
+            std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
             neuron->setActivation(activation);
 
             if (activation != 1.0)

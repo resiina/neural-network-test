@@ -1,6 +1,8 @@
 #ifndef NEURONCONNECTION_H
 #define NEURONCONNECTION_H
 
+#include <memory>
+
 class Neuron;
 
 class NeuronConnection
@@ -11,13 +13,13 @@ public:
     double getWeight() const;
     void setWeight(const double weight);
 
-    Neuron* getConnectedNeuron() const;
-    void setConnectedNeuron(Neuron* neuron);
+    std::shared_ptr<Neuron> getConnectedNeuron() const;
+    void setConnectedNeuron(std::shared_ptr<Neuron> neuron);
 
 private:
     double myWeight;
 
-    Neuron* myConnectedNeuron;
+    std::shared_ptr<Neuron> myConnectedNeuron;
 };
 
 #endif // NEURONCONNECTION_H

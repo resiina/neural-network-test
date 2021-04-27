@@ -16,12 +16,12 @@ void NeuronConnection::setWeight(const double weight)
     myWeight = weight;
 }
 
-Neuron* NeuronConnection::getConnectedNeuron() const
+std::shared_ptr<Neuron> NeuronConnection::getConnectedNeuron() const
 {
     return myConnectedNeuron;
 }
 
-void NeuronConnection::setConnectedNeuron(Neuron* neuron)
+void NeuronConnection::setConnectedNeuron(std::shared_ptr<Neuron> neuron)
 {
     myConnectedNeuron = neuron;
 }

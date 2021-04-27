@@ -18,20 +18,20 @@ public:
     void setBias(const double bias);
     double getBias() const;
 
-    void setPrevConnections(std::vector<NeuronConnection*> connections);
-    std::vector<NeuronConnection*> getPrevConnections();
-    void appendPrevConnection(NeuronConnection* connection);
+    void setPrevConnections(std::vector<std::shared_ptr<NeuronConnection>> connections);
+    std::vector<std::shared_ptr<NeuronConnection>> getPrevConnections();
+    void appendPrevConnection(std::shared_ptr<NeuronConnection> connection);
 
-    void setNextConnections(std::vector<NeuronConnection*> connections);
-    std::vector<NeuronConnection*> getNextConnections();
-    void appendNextConnection(NeuronConnection* connection);
+    void setNextConnections(std::vector<std::shared_ptr<NeuronConnection>> connections);
+    std::vector<std::shared_ptr<NeuronConnection>> getNextConnections();
+    void appendNextConnection(std::shared_ptr<NeuronConnection> connection);
 
 private:
     double myActivation;
     double myBias;
 
-    std::vector<NeuronConnection*> myPrevConnections;
-    std::vector<NeuronConnection*> myNextConnections;
+    std::vector<std::shared_ptr<NeuronConnection>> myPrevConnections;
+    std::vector<std::shared_ptr<NeuronConnection>> myNextConnections;
 };
 
 #endif // NEURON_H

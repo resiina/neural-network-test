@@ -44,32 +44,32 @@ double Neuron::getBias() const
     return myBias;
 }
 
-void Neuron::setPrevConnections(std::vector<NeuronConnection*> connections)
+void Neuron::setPrevConnections(std::vector<std::shared_ptr<NeuronConnection>> connections)
 {
     myPrevConnections = connections;
 }
 
-std::vector<NeuronConnection*> Neuron::getPrevConnections()
+std::vector<std::shared_ptr<NeuronConnection>> Neuron::getPrevConnections()
 {
     return myPrevConnections;
 }
 
-void Neuron::appendPrevConnection(NeuronConnection* connection)
+void Neuron::appendPrevConnection(std::shared_ptr<NeuronConnection> connection)
 {
     myPrevConnections.push_back(connection);
 }
 
-void Neuron::setNextConnections(std::vector<NeuronConnection*> connections)
+void Neuron::setNextConnections(std::vector<std::shared_ptr<NeuronConnection>> connections)
 {
     myNextConnections = connections;
 }
 
-std::vector<NeuronConnection*> Neuron::getNextConnections()
+std::vector<std::shared_ptr<NeuronConnection>> Neuron::getNextConnections()
 {
     return myNextConnections;
 }
 
-void Neuron::appendNextConnection(NeuronConnection* connection)
+void Neuron::appendNextConnection(std::shared_ptr<NeuronConnection> connection)
 {
     myNextConnections.push_back(connection);
 }

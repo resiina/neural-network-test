@@ -7,17 +7,17 @@ NeuralNetwork::NeuralNetwork()
 
 }
 
-NeuronLayer* NeuralNetwork::getNeuronLayer(const unsigned int index) const
+std::shared_ptr<NeuronLayer> NeuralNetwork::getNeuronLayer(const unsigned int index) const
 {
     return myNeuronLayers.at(index);
 }
 
-void NeuralNetwork::setNeuronLayer(const unsigned int index, NeuronLayer* neuronLayer)
+void NeuralNetwork::setNeuronLayer(const unsigned int index, std::shared_ptr<NeuronLayer> neuronLayer)
 {
     myNeuronLayers[index] = neuronLayer;
 }
 
-void NeuralNetwork::appendNeuronLayer(NeuronLayer* neuronLayer)
+void NeuralNetwork::appendNeuronLayer(std::shared_ptr<NeuronLayer> neuronLayer)
 {
     myNeuronLayers.push_back(neuronLayer);
 }
