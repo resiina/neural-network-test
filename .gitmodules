@@ -1,0 +1,3 @@
+[submodule "external/Bitmap"]
+	path = external/Bitmap
+	url = https://github.com/kbuffardi/Bitmap.git
