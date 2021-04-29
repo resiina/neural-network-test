@@ -1,13 +1,10 @@
-# Generate solution
-cmake -B build -S .
+$buildResult = ./build
 
-# Build
-cmake --build build --config Release
-
-# Run
-Write-Host "Running application, output:"
-Write-Host ""
-Write-Host ""
-./build/Release/NeuralNetworkTestApp.exe
-Write-Host ""
-Write-Host ""
+if ($buildResult -eq "SUCCESS") {
+    # Build succeeded, run
+    ./run
+}
+else {
+    # Build failed
+    throw "Build failed, did not run application"
+}
