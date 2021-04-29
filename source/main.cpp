@@ -86,6 +86,7 @@ int main()
 
             if (activation != 1.0)
             {
+                // Don't print white colors
                 std::cout << activation;
             }
             else
