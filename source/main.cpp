@@ -57,8 +57,6 @@ int main()
             neuron->setActivation(activation);
             neuron->setBias(bias);
 
-            // TODO: random connection weights
-
             layer->appendNeuron(neuron);
         }
 
