@@ -39,10 +39,10 @@ void NeuronLayer::connectNextLayerNeurons(std::shared_ptr<NeuronLayer> nextLayer
 {
     std::cout << "Neuron count: " << myNeurons.size() << std::endl;
 
-    for (auto neuron : myNeurons)
+    for (auto & neuron : myNeurons)
     {
         std::vector<std::shared_ptr<Neuron>> nextLayerNeurons = nextLayer->getNeurons();
-        for (auto nextLayerNeuron : nextLayerNeurons)
+        for (auto & nextLayerNeuron : nextLayerNeurons)
         {
             std::shared_ptr<NeuronConnection> connection = std::make_shared<NeuronConnection>();
             connection->setConnectedNeuron(nextLayerNeuron);
@@ -54,9 +54,9 @@ void NeuronLayer::connectNextLayerNeurons(std::shared_ptr<NeuronLayer> nextLayer
 
 void NeuronLayer::connectPrevLayerNeurons(std::shared_ptr<NeuronLayer> prevLayer)
 {
-    for (auto neuron : myNeurons)
+    for (auto & neuron : myNeurons)
     {
-        for (auto prevLayerNeuron : prevLayer->getNeurons())
+        for (auto & prevLayerNeuron : prevLayer->getNeurons())
         {
             std::shared_ptr<NeuronConnection> connection = std::make_shared<NeuronConnection>();
             connection->setConnectedNeuron(prevLayerNeuron);
