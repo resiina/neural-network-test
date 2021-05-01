@@ -21,6 +21,7 @@ void Neuron::computeActivation()
 
     sum += myBias;
 
+    // myActivation = 1 / (1 + exp(-sum)); // Sigmoid alternative
     myActivation = (tanh(sum) + 1.0) / 2.0;
 }
 
