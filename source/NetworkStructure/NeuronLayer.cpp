@@ -46,6 +46,10 @@ void NeuronLayer::connectNextLayerNeurons(std::shared_ptr<NeuronLayer> nextLayer
         {
             std::shared_ptr<NeuronConnection> connection = std::make_shared<NeuronConnection>();
             connection->setConnectedNeuron(nextLayerNeuron);
+            
+            // Set random initial weight
+            const double weight = (std::rand() % 100) / 100.0;
+            connection->setWeight(weight);
 
             neuron->appendNextConnection(connection);
         }
@@ -60,6 +64,10 @@ void NeuronLayer::connectPrevLayerNeurons(std::shared_ptr<NeuronLayer> prevLayer
         {
             std::shared_ptr<NeuronConnection> connection = std::make_shared<NeuronConnection>();
             connection->setConnectedNeuron(prevLayerNeuron);
+
+            // Set random initial weight
+            const double weight = (std::rand() % 100) / 100.0;
+            connection->setWeight(weight);
 
             neuron->appendPrevConnection(connection);
         }
