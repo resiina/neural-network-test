@@ -1,4 +1,4 @@
-$buildResult = ./build
+$buildResult = ./build Release
 
 if ($buildResult -eq "SUCCESS") {
     # Build succeeded, run

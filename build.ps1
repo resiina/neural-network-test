@@ -3,7 +3,7 @@ cmake -B build -S .
 
 if ($?) {
     # Build
-    cmake --build build --config Release
+    cmake --build build --config $args[0]
 
     if($?) {
         # Build succeeded, run
