@@ -17,10 +17,9 @@ int main()
 
     PixelMatrix pixelMatrix = testBitmap.toPixelMatrix();
 
-    size_t height = pixelMatrix.size();
-    size_t width = pixelMatrix.at(0).size();
-
-    size_t pixelCount = width * height;
+    const size_t inputImageHeight = pixelMatrix.size();
+    const size_t inputImageWidth = pixelMatrix.at(0).size();
+    const size_t inputImagePixelCount = inputImageWidth * inputImageHeight;
 
     // -----------------------------------------------------
 
@@ -35,7 +34,7 @@ int main()
         if (i == 0)
         {
             // Input layer
-            neuronCount = pixelCount;
+            neuronCount = inputImagePixelCount;
         }
         else if (i > 0 && i < layerCount - 1)
         {
@@ -78,7 +77,7 @@ int main()
         int x = 0;
         for (const auto & pixel : pixelRow)
         {
-            unsigned int neuronIndex = static_cast<unsigned int>(width * y + x);
+            unsigned int neuronIndex = static_cast<unsigned int>(inputImageWidth * y + x);
             std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
 
             const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
