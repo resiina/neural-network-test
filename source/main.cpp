@@ -12,10 +12,10 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     
     // -----------------------------------------------------
-    Bitmap testBitmap;
-    testBitmap.open("data/1.bmp");
+    Bitmap inputImage;
+    inputImage.open("data/1.bmp");
 
-    PixelMatrix pixelMatrix = testBitmap.toPixelMatrix();
+    PixelMatrix pixelMatrix = inputImage.toPixelMatrix();
 
     const size_t inputImageHeight = pixelMatrix.size();
     const size_t inputImageWidth = pixelMatrix.at(0).size();
