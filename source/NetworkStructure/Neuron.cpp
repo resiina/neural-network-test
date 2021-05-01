@@ -2,10 +2,11 @@
 
 #include <math.h>
 
-Neuron::Neuron() :
-    myActivation(0)
+Neuron::Neuron()
 {
-
+    // Initialize each neuron with random values
+    myActivation = (std::rand() % 100) / 100.0;
+    myBias = (std::rand() % 100) / 100.0;
 }
 
 void Neuron::computeActivation()

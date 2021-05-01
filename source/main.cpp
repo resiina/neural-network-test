@@ -50,13 +50,6 @@ int main()
         for (int j = 0; j < neuronCount; j++)
         {
             std::shared_ptr<Neuron> neuron = std::make_shared<Neuron>();
-
-            // Initialize each neuron with random values
-            const double activation = (std::rand() % 100) / 100.0;
-            const double bias = (std::rand() % 100) / 100.0;
-            neuron->setActivation(activation);
-            neuron->setBias(bias);
-
             layer->appendNeuron(neuron);
         }
 
