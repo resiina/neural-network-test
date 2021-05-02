@@ -10,7 +10,7 @@ NeuronLayer::NeuronLayer()
 
 }
 
-std::shared_ptr<Neuron> NeuronLayer::getNeuron(const unsigned int index) const
+std::shared_ptr<Neuron> NeuronLayer::getNeuron(const size_t index) const
 {
     return myNeurons.at(index);
 }
@@ -20,7 +20,7 @@ std::vector<std::shared_ptr<Neuron>> NeuronLayer::getNeurons() const
     return myNeurons;
 }
 
-void NeuronLayer::setNeuron(const unsigned int index, std::shared_ptr<Neuron> neuron)
+void NeuronLayer::setNeuron(const size_t index, std::shared_ptr<Neuron> neuron)
 {
     myNeurons[index] = neuron;
 }

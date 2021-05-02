@@ -1,18 +1,19 @@
 #include "NeuralNetwork.h"
 
 #include "NeuronLayer.h"
+#include "Neuron.h"
 
 NeuralNetwork::NeuralNetwork()
 {
 
 }
 
-std::shared_ptr<NeuronLayer> NeuralNetwork::getNeuronLayer(const unsigned int index) const
+std::shared_ptr<NeuronLayer> NeuralNetwork::getNeuronLayer(const size_t index) const
 {
     return myNeuronLayers.at(index);
 }
 
-void NeuralNetwork::setNeuronLayer(const unsigned int index, std::shared_ptr<NeuronLayer> neuronLayer)
+void NeuralNetwork::setNeuronLayer(const size_t index, std::shared_ptr<NeuronLayer> neuronLayer)
 {
     myNeuronLayers[index] = neuronLayer;
 }
@@ -22,9 +23,22 @@ void NeuralNetwork::appendNeuronLayer(std::shared_ptr<NeuronLayer> neuronLayer)
     myNeuronLayers.push_back(neuronLayer);
 }
 
+void NeuralNetwork::appendNeuronLayer(const size_t neuronCount)
+{
+    std::shared_ptr<NeuronLayer> newLayer = std::make_shared<NeuronLayer>();
+
+    for (size_t neuronIndex = 0; neuronIndex < neuronCount; neuronIndex++)
+    {
+        std::shared_ptr<Neuron> neuron = std::make_shared<Neuron>();
+        newLayer->appendNeuron(neuron);
+    }
+
+    myNeuronLayers.push_back(newLayer);
+}
+
 void NeuralNetwork::connectLayers()
 {
-    for (unsigned int i = 0; i < myNeuronLayers.size(); i++)
+    for (size_t i = 0; i < myNeuronLayers.size(); i++)
     {
         if (i > 0)
         {

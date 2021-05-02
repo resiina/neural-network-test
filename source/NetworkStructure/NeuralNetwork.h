@@ -11,9 +11,10 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
-    std::shared_ptr<NeuronLayer> getNeuronLayer(const unsigned int index) const;
-    void setNeuronLayer(const unsigned int index, std::shared_ptr<NeuronLayer> neuron);
+    std::shared_ptr<NeuronLayer> getNeuronLayer(const size_t index) const;
+    void setNeuronLayer(const size_t index, std::shared_ptr<NeuronLayer> neuron);
     void appendNeuronLayer(std::shared_ptr<NeuronLayer> neuron);
+    void appendNeuronLayer(const size_t neuronCount);
     void connectLayers();
     void clear();
 

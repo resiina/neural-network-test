@@ -25,36 +25,21 @@ int main()
 
     NeuralNetwork network;
 
-    const int layerCount = 4; // input, 2 hidden, output
+    // Input layer takes all image pixels as activations
+    const size_t inputLayerNeuronCount = inputImagePixelCount;
+    network.appendNeuronLayer(inputLayerNeuronCount);
 
-    for (int i = 0; i < layerCount; i++)
+    // Define some hidden layers
+    const size_t hiddenLayerCount = 2;
+    const size_t hiddenLayerNeuronCount = 16;
+    for (size_t hiddenLayerIndex = 0; hiddenLayerIndex < hiddenLayerCount; hiddenLayerIndex++)
     {
-        std::shared_ptr<NeuronLayer> layer = std::make_shared<NeuronLayer>();
-        size_t neuronCount = 0;
-        if (i == 0)
-        {
-            // Input layer
-            neuronCount = inputImagePixelCount;
-        }
-        else if (i > 0 && i < layerCount - 1)
-        {
-            // Hidden layers
-            neuronCount = 16;
-        }
-        else
-        {
-            // Output layer
-            neuronCount = 10; // 0 - 9
-        }
-
-        for (int j = 0; j < neuronCount; j++)
-        {
-            std::shared_ptr<Neuron> neuron = std::make_shared<Neuron>();
-            layer->appendNeuron(neuron);
-        }
-
-        network.appendNeuronLayer(layer);
+        network.appendNeuronLayer(hiddenLayerNeuronCount);
     }
+    
+    // Network outputs 10 different possible results, an integer from 0 to 9
+    const int outputLayerNeuronCount = 10;
+    network.appendNeuronLayer(outputLayerNeuronCount);
 
     network.connectLayers();
 
@@ -68,7 +53,7 @@ int main()
         int x = 0;
         for (const auto & pixel : pixelRow)
         {
-            unsigned int neuronIndex = static_cast<unsigned int>(inputImageWidth * y + x);
+            size_t neuronIndex = static_cast<size_t>(inputImageWidth * y + x);
             std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
 
             const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
