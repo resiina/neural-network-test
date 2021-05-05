@@ -47,13 +47,13 @@ int main()
 
     std::cout << std::setprecision(2);
 
-    int y = 0;
-    for (const auto & pixelRow : pixelMatrix)
+    for (size_t y = 0; y < pixelMatrix.size(); y++)
     {
-        int x = 0;
-        for (const auto & pixel : pixelRow)
+        const std::vector<Pixel> & pixelRow = pixelMatrix.at(y);
+        for (size_t x = 0; x < pixelRow.size(); x++)
         {
-            const size_t neuronIndex = static_cast<size_t>(inputImageWidth * y + x);
+            const Pixel & pixel = pixelRow.at(x);
+            const size_t neuronIndex = inputImageWidth * y + x;
             std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
 
             const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
@@ -70,11 +70,9 @@ int main()
             }
 
             std::cout << "\t";
-            x++;
         }
         
         std::cout << std::endl;
-        y++;
     }
 
     return 0;
