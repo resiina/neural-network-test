@@ -1,11 +1,25 @@
-# How to build
+# Neural Network Test App
 
-```
-./build Release
-```
+## How to build
 
-# How to run
+Requirements:
+- Windows
+- PowerShell
+- CMake
+- Compiler
 
+Run
 ```
-./run
+.\build.ps1 Release
 ```
+in repository root directory
+
+----------------------
+
+## How to run
+
+Run
+```
+.\run.ps1
+```
+in repository root directory
