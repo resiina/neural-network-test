@@ -8,9 +8,35 @@ NeuralNetwork::NeuralNetwork()
 
 }
 
+void NeuralNetwork::compute()
+{
+    for (auto & neuronLayer : myNeuronLayers)
+    {
+        for (auto & neuron : neuronLayer->getNeurons())
+        {
+            neuron->computeActivation();
+        }
+    }
+}
+
+std::vector<std::shared_ptr<NeuronLayer>> NeuralNetwork::getNeuronLayers() const
+{
+    return myNeuronLayers;
+}
+
 std::shared_ptr<NeuronLayer> NeuralNetwork::getNeuronLayer(const size_t index) const
 {
     return myNeuronLayers.at(index);
+}
+
+std::shared_ptr<NeuronLayer> NeuralNetwork::getFirstNeuronLayer() const
+{
+    return *(myNeuronLayers.begin());
+}
+
+std::shared_ptr<NeuronLayer> NeuralNetwork::getLastNeuronLayer() const
+{
+    return *(myNeuronLayers.rbegin());
 }
 
 void NeuralNetwork::setNeuronLayer(const size_t index, std::shared_ptr<NeuronLayer> neuronLayer)
