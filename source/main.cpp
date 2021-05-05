@@ -43,10 +43,11 @@ int main()
 
     network.connectLayers();
 
-    std::shared_ptr<NeuronLayer> inputLayer = network.getNeuronLayer(0);
+    std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
     std::cout << std::setprecision(2);
 
+    // Set input layer activations based on input image
     for (size_t y = 0; y < pixelMatrix.size(); y++)
     {
         const std::vector<Pixel> & pixelRow = pixelMatrix.at(y);
@@ -73,6 +74,18 @@ int main()
         }
         
         std::cout << std::endl;
+    }
+
+    // Compute results
+    network.compute();
+
+    // Show output
+    std::cout << "Output layer activations:" << std::endl;
+    const auto & outputLayerNeurons = network.getLastNeuronLayer()->getNeurons();
+    for (size_t i = 0; i < outputLayerNeurons.size(); i++)
+    {
+        const auto & outputNeuron = outputLayerNeurons.at(i);
+        std::cout << i << ": " << outputNeuron->getActivation() << std::endl;
     }
 
     return 0;
