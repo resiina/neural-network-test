@@ -53,20 +53,20 @@ int main()
         int x = 0;
         for (const auto & pixel : pixelRow)
         {
-            size_t neuronIndex = static_cast<size_t>(inputImageWidth * y + x);
+            const size_t neuronIndex = static_cast<size_t>(inputImageWidth * y + x);
             std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
 
             const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
             neuron->setActivation(activation);
 
-            if (activation != 1.0)
+            if (activation == 1.0)
             {
-                // Don't print white colors
-                std::cout << activation;
+                // Don't print full activation (white)
+                std::cout << " ";
             }
             else
             {
-                std::cout << " ";
+                std::cout << activation;
             }
 
             std::cout << "\t";
