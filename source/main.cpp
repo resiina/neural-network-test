@@ -22,7 +22,8 @@ int main()
     const size_t inputImagePixelCount = inputImageWidth * inputImageHeight;
 
     // -----------------------------------------------------
-
+    // Construct the network
+    // -----------------------------------------------------
     NeuralNetwork network;
 
     // Input layer takes all image pixels as activations
@@ -43,11 +44,21 @@ int main()
 
     network.connectLayers();
 
-    std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
+    // -----------------------------------------------------
+    // Train the network
+    // -----------------------------------------------------
+    
+    // TODO
+    //network.setTrainingData(annotatedImages);
+    //network.train();
 
+    // -----------------------------------------------------
+    // Use network for recognition
+    // -----------------------------------------------------
     std::cout << std::setprecision(2);
 
     // Set input layer activations based on input image
+    std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
     for (size_t y = 0; y < pixelMatrix.size(); y++)
     {
         const std::vector<Pixel> & pixelRow = pixelMatrix.at(y);
