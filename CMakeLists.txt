@@ -27,3 +27,5 @@ include_directories(NeuralNetworkTestApp
     ${applicationIncludeDirectories}
     ${externalIncludeDirectories}
 )
+
+set_property(TARGET NeuralNetworkTestApp PROPERTY CXX_STANDARD 17)
