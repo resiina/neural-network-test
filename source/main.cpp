@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <filesystem>
 
 #include "lodepng.h"
 
@@ -10,7 +11,7 @@
 int main()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    
+
     // -----------------------------------------------------
     std::vector<unsigned char> imageData;
     unsigned int inputImageWidth;
@@ -54,9 +55,37 @@ int main()
     // Train the network
     // -----------------------------------------------------
     
+    // Collect training data
+    std::vector<std::vector<std::vector<unsigned char>>> trainingImageDataCollection;
+    for (size_t number = 0; number < 10; number++)
+    {
+        namespace fs = std::filesystem;
+
+        std::vector<std::vector<unsigned char>> trainingImages;
+        for (auto & entry : fs::directory_iterator("data\\training\\" + std::to_string(number)))
+        {
+            std::vector<unsigned char> trainingImageData;
+            unsigned int imageWidth;
+            unsigned int imageHeight;
+            const std::string trainingFilePath = entry.path().string();
+            const size_t bytesPerPixel = 4;
+
+            const unsigned int result = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath.c_str());
+            if (result != 0)
+            {
+                std::cout << "Loading PNG failed." << std::endl << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
+                return -1;
+            }
+
+            trainingImages.emplace_back(trainingImageData);
+        }
+
+        trainingImageDataCollection.emplace_back(trainingImages);
+    }
+
     // TODO
-    //network.setTrainingData(annotatedImages);
-    //network.train();
+
+    //network.train(trainingImageDataCollection);
 
     // -----------------------------------------------------
     // Use network for recognition
