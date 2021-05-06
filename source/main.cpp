@@ -21,7 +21,7 @@ int main()
     const unsigned int result = lodepng::decode(imageData, inputImageWidth, inputImageHeight, filePath.c_str());
     if (result != 0)
     {
-        std::cout << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
+        std::cout << "Loading PNG failed." << std::endl << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
         return -1;
     }
 
@@ -30,11 +30,12 @@ int main()
     // -----------------------------------------------------
     NeuralNetwork network;
 
+    // 1. Define input layer
     // Input layer takes all image pixels as activations
     const size_t inputLayerNeuronCount = imageData.size() / bytesPerPixel;
     network.appendNeuronLayer(inputLayerNeuronCount);
 
-    // Define some hidden layers
+    // 2. Define some hidden layers
     const size_t hiddenLayerCount = 2;
     const size_t hiddenLayerNeuronCount = 16;
     for (size_t hiddenLayerIndex = 0; hiddenLayerIndex < hiddenLayerCount; hiddenLayerIndex++)
@@ -42,6 +43,7 @@ int main()
         network.appendNeuronLayer(hiddenLayerNeuronCount);
     }
     
+    // 3. Define output layer
     // Network outputs 10 different possible results, an integer from 0 to 9
     const int outputLayerNeuronCount = 10;
     network.appendNeuronLayer(outputLayerNeuronCount);
@@ -61,7 +63,7 @@ int main()
     // -----------------------------------------------------
     std::cout << std::setprecision(2);
 
-    // Set input layer activations based on input image
+    // 1. Set input layer activations based on input image
     std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
     for (size_t i = 0; i < imageData.size(); i += bytesPerPixel)
@@ -86,10 +88,10 @@ int main()
         std::cout << std::endl;
     }
 
-    // Compute results
+    // 2. Compute results
     network.compute();
 
-    // Show output
+    // 3. Show output
     std::cout << "Output layer activations:" << std::endl;
     const auto & outputLayerNeurons = network.getLastNeuronLayer()->getNeurons();
     for (size_t i = 0; i < outputLayerNeurons.size(); i++)
