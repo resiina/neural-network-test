@@ -15,10 +15,10 @@ int main()
     std::vector<unsigned char> imageData;
     unsigned int inputImageWidth;
     unsigned int inputImageHeight;
-    const std::string filePath = "data/testing/0/3.png";
+    const std::string inputFilePath = "data/testing/0/3.png";
     const size_t bytesPerPixel = 4;
 
-    const unsigned int result = lodepng::decode(imageData, inputImageWidth, inputImageHeight, filePath.c_str());
+    const unsigned int result = lodepng::decode(imageData, inputImageWidth, inputImageHeight, inputFilePath.c_str());
     if (result != 0)
     {
         std::cout << "Loading PNG failed." << std::endl << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
