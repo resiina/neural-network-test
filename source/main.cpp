@@ -1,7 +1,7 @@
 #include <iostream>
 #include <iomanip>
 
-#include "bitmap.h"
+#include "lodepng.h"
 
 #include "NeuralNetwork.h"
 #include "NeuronLayer.h"
@@ -12,14 +12,18 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     
     // -----------------------------------------------------
-    Bitmap inputImage;
-    inputImage.open("data/1.bmp");
+    std::vector<unsigned char> imageData;
+    unsigned int inputImageWidth;
+    unsigned int inputImageHeight;
+    const std::string filePath = "data/testing/0/3.png";
+    const size_t bytesPerPixel = 4;
 
-    PixelMatrix pixelMatrix = inputImage.toPixelMatrix();
-
-    const size_t inputImageHeight = pixelMatrix.size();
-    const size_t inputImageWidth = pixelMatrix.at(0).size();
-    const size_t inputImagePixelCount = inputImageWidth * inputImageHeight;
+    const unsigned int result = lodepng::decode(imageData, inputImageWidth, inputImageHeight, filePath.c_str());
+    if (result != 0)
+    {
+        std::cout << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
+        return -1;
+    }
 
     // -----------------------------------------------------
     // Construct the network
@@ -27,7 +31,7 @@ int main()
     NeuralNetwork network;
 
     // Input layer takes all image pixels as activations
-    const size_t inputLayerNeuronCount = inputImagePixelCount;
+    const size_t inputLayerNeuronCount = imageData.size() / bytesPerPixel;
     network.appendNeuronLayer(inputLayerNeuronCount);
 
     // Define some hidden layers
@@ -59,31 +63,26 @@ int main()
 
     // Set input layer activations based on input image
     std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
-    for (size_t y = 0; y < pixelMatrix.size(); y++)
+
+    for (size_t i = 0; i < imageData.size(); i += bytesPerPixel)
     {
-        const std::vector<Pixel> & pixelRow = pixelMatrix.at(y);
-        for (size_t x = 0; x < pixelRow.size(); x++)
-        {
-            const Pixel & pixel = pixelRow.at(x);
-            const size_t neuronIndex = inputImageWidth * y + x;
-            std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
-
-            const double activation = (pixel.red + pixel.green + pixel.blue) / 3.0 / 255.0; // Gray [0, 1]
-            neuron->setActivation(activation);
-
-            if (activation == 1.0)
-            {
-                // Don't print full activation (white)
-                std::cout << " ";
-            }
-            else
-            {
-                std::cout << activation;
-            }
-
-            std::cout << "\t";
-        }
+        const unsigned char & red   = imageData.at(i);
+        const unsigned char & green = imageData.at(i + 1);
+        const unsigned char & blue  = imageData.at(i + 2);
+        //const unsigned char & alpha = imageData.at(i + 3);
         
+        const size_t neuronIndex = i / bytesPerPixel;
+        std::shared_ptr<Neuron> neuron = inputLayer->getNeuron(neuronIndex);
+
+        const double activation = (red + green + blue) / 3.0 / 255.0; // Gray [0, 1]
+        neuron->setActivation(activation);
+
+        if (activation != 0.0)
+        {
+            // Only print positive activations (not black)
+            std::cout << activation;
+        }
+
         std::cout << std::endl;
     }
 

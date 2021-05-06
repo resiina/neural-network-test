@@ -11,11 +11,11 @@ list(APPEND applicationIncludeDirectories
 )
 
 list(APPEND externalSources
-    external/Bitmap/bitmap.cpp
+    external/lodepng/lodepng.cpp
 )
 
 list(APPEND externalIncludeDirectories
-    external/Bitmap
+    external/lodepng
 )
 
 add_executable(NeuralNetworkTestApp
