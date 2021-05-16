@@ -37,8 +37,6 @@ void NeuronLayer::clear()
 
 void NeuronLayer::connectNextLayerNeurons(std::shared_ptr<NeuronLayer> nextLayer)
 {
-    std::cout << "Neuron count: " << myNeurons.size() << std::endl;
-
     for (auto & neuron : myNeurons)
     {
         std::vector<std::shared_ptr<Neuron>> nextLayerNeurons = nextLayer->getNeurons();

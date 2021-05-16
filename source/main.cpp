@@ -13,18 +13,8 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     // -----------------------------------------------------
-    std::vector<unsigned char> imageData;
-    unsigned int inputImageWidth;
-    unsigned int inputImageHeight;
-    const std::string inputFilePath = "data/testing/0/3.png";
-    const size_t bytesPerPixel = 4;
-
-    const unsigned int result = lodepng::decode(imageData, inputImageWidth, inputImageHeight, inputFilePath.c_str());
-    if (result != 0)
-    {
-        std::cout << "Loading PNG failed." << std::endl << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
-        return -1;
-    }
+    const unsigned int inputImageWidth = 28;
+    const unsigned int inputImageHeight = 28;
 
     // -----------------------------------------------------
     // Construct the network
@@ -33,7 +23,7 @@ int main()
 
     // 1. Define input layer
     // Input layer takes all image pixels as activations
-    const size_t inputLayerNeuronCount = imageData.size() / bytesPerPixel;
+    const size_t inputLayerNeuronCount = inputImageWidth * inputImageHeight;
     network.appendNeuronLayer(inputLayerNeuronCount);
 
     // 2. Define some hidden layers
@@ -64,16 +54,17 @@ int main()
         std::vector<std::vector<unsigned char>> trainingImages;
         for (auto & entry : fs::directory_iterator("data\\training\\" + std::to_string(number)))
         {
+            const std::string trainingFilePath = entry.path().string();
             std::vector<unsigned char> trainingImageData;
+
             unsigned int imageWidth;
             unsigned int imageHeight;
-            const std::string trainingFilePath = entry.path().string();
-            const size_t bytesPerPixel = 4;
 
             const unsigned int result = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath.c_str());
             if (result != 0)
             {
-                std::cout << "Loading PNG failed." << std::endl << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
+                std::cout << "Loading PNG failed." << std::endl
+                          << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
                 return -1;
             }
 
@@ -95,11 +86,24 @@ int main()
     // 1. Set input layer activations based on input image
     std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
-    for (size_t i = 0; i < imageData.size(); i += bytesPerPixel)
+    const size_t bytesPerPixel = 4;
+    const std::string testFilePath = "data/testing/0/3.png";
+    std::vector<unsigned char> testImageData;
+    unsigned int testImageWidth;
+    unsigned int testImageHeight;
+    const unsigned int pngDecodeResult = lodepng::decode(testImageData, testImageWidth, testImageHeight, testFilePath.c_str());
+    if (pngDecodeResult != 0)
     {
-        const unsigned char & red   = imageData.at(i);
-        const unsigned char & green = imageData.at(i + 1);
-        const unsigned char & blue  = imageData.at(i + 2);
+        std::cout << "Loading PNG failed." << std::endl
+                  << "Decoder error " << pngDecodeResult << ": " << lodepng_error_text(pngDecodeResult) << std::endl;
+        return -1;
+    }
+
+    for (size_t i = 0; i < testImageData.size(); i += bytesPerPixel)
+    {
+        const unsigned char & red   = testImageData.at(i);
+        const unsigned char & green = testImageData.at(i + 1);
+        const unsigned char & blue  = testImageData.at(i + 2);
         //const unsigned char & alpha = imageData.at(i + 3);
         
         const size_t neuronIndex = i / bytesPerPixel;
