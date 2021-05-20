@@ -52,7 +52,7 @@ int main()
         namespace fs = std::filesystem;
 
         std::vector<std::vector<unsigned char>> trainingImages;
-        for (auto & entry : fs::directory_iterator("data\\training\\" + std::to_string(number)))
+        for (auto & entry : fs::directory_iterator("../../data/training/" + std::to_string(number)))
         {
             const std::string trainingFilePath = entry.path().string();
             std::vector<unsigned char> trainingImageData;
@@ -60,11 +60,11 @@ int main()
             unsigned int imageWidth;
             unsigned int imageHeight;
 
-            const unsigned int result = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath.c_str());
-            if (result != 0)
+            const unsigned int pngDecodeResult = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath.c_str());
+            if (pngDecodeResult != 0)
             {
                 std::cout << "Loading PNG failed." << std::endl
-                          << "Decoder error " << result << ": " << lodepng_error_text(result) << std::endl;
+                          << "Decoder error " << pngDecodeResult << ": " << lodepng_error_text(pngDecodeResult) << std::endl;
                 return -1;
             }
 
