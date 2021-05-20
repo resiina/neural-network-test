@@ -10,9 +10,15 @@ Requirements:
 
 Run
 ```
-.\build.ps1 Release
+cmake -B build -S .
 ```
-in repository root directory
+in repository root directory to generate project files.
+
+Run
+```
+cmake --build build --config Release
+```
+in repository root directory to build the executable.
 
 ----------------------
 
@@ -20,6 +26,6 @@ in repository root directory
 
 Run
 ```
-.\run.ps1
+./build/Release/NeuralNetworkTestApp.exe
 ```
-in repository root directory
+in repository root directory to run the executable.
