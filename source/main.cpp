@@ -87,7 +87,7 @@ int main()
     std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
     const size_t bytesPerPixel = 4;
-    const std::string testFilePath = "data/testing/0/3.png";
+    const std::string testFilePath = "../../data/testing/0/3.png";
     std::vector<unsigned char> testImageData;
     unsigned int testImageWidth;
     unsigned int testImageHeight;
