@@ -1,12 +1,33 @@
 #include <iostream>
 #include <iomanip>
 #include <filesystem>
+#include <memory>
 
 #include "lodepng.h"
 
 #include "NeuralNetwork.h"
 #include "NeuronLayer.h"
 #include "Neuron.h"
+
+struct TrainingExample
+{
+    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
+    //std::vector<unsigned char> data; // RGBA [0, 255]
+    std::vector<double> activations; // BW [0, 1]
+};
+
+struct LabelTrainingData
+{
+    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
+    std::vector<std::shared_ptr<TrainingExample>> trainingExamples; // individual training examples
+};
+
+struct TrainingDataCollection
+{
+    std::vector<std::shared_ptr<LabelTrainingData>> labelTrainingData;
+};
+
+const size_t bytesPerPixel = 4;
 
 int main()
 {
@@ -46,17 +67,17 @@ int main()
     // -----------------------------------------------------
     
     // Collect training data
-    std::vector<std::vector<std::vector<unsigned char>>> trainingImageDataCollection;
+    TrainingDataCollection trainingDataCollection;
     for (size_t number = 0; number < 10; number++)
     {
         namespace fs = std::filesystem;
 
-        std::vector<std::vector<unsigned char>> trainingImages;
+        std::shared_ptr<LabelTrainingData> labelTrainingData = std::make_shared<LabelTrainingData>(); 
         for (auto & entry : fs::directory_iterator("../../data/training/" + std::to_string(number)))
         {
             const std::string trainingFilePath = entry.path().string();
+            
             std::vector<unsigned char> trainingImageData;
-
             unsigned int imageWidth;
             unsigned int imageHeight;
 
@@ -68,10 +89,26 @@ int main()
                 return -1;
             }
 
-            trainingImages.emplace_back(trainingImageData);
+            std::shared_ptr<TrainingExample> trainingExample = std::make_shared<TrainingExample>();
+            for (size_t i = 0; i < trainingImageData.size(); i += bytesPerPixel)
+            {
+                const unsigned char & red   = trainingImageData.at(i);
+                const unsigned char & green = trainingImageData.at(i + 1);
+                const unsigned char & blue  = trainingImageData.at(i + 2);
+                //const unsigned char & alpha = trainingImageData.at(i + 3);
+
+                const double activation = (red + green + blue) / 3.0 / 255.0; // Gray [0, 1]
+                trainingExample->activations.push_back(activation);
+            }
+            
+            trainingExample->label = number;
+
+            labelTrainingData->trainingExamples.push_back(trainingExample);
         }
 
-        trainingImageDataCollection.emplace_back(trainingImages);
+        labelTrainingData->label = number;
+
+        trainingDataCollection.labelTrainingData.push_back(labelTrainingData);
     }
 
     // TODO
@@ -86,7 +123,6 @@ int main()
     // 1. Set input layer activations based on input image
     std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
-    const size_t bytesPerPixel = 4;
     const std::string testFilePath = "../../data/testing/0/3.png";
     std::vector<unsigned char> testImageData;
     unsigned int testImageWidth;
