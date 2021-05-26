@@ -5,6 +5,7 @@
 #include <memory>
 
 class NeuronLayer;
+class TrainingDataCollection;
 
 class NeuralNetwork
 {
@@ -24,6 +25,8 @@ public:
     void appendNeuronLayer(const size_t neuronCount);
     void connectLayers();
     void clear();
+
+    void train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
 
 private:
     std::vector<std::shared_ptr<NeuronLayer>> myNeuronLayers;

@@ -83,3 +83,8 @@ void NeuralNetwork::clear()
     myNeuronLayers.clear();
 }
 
+void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
+{
+    // TODO
+}
+

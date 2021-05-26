@@ -51,9 +51,8 @@ int main()
     std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
     trainingDataCollection->collect("../../data/training/");
 
-    // TODO
-
-    //network.train(trainingDataCollection);
+    // Train the network, takes a long time
+    network.train(trainingDataCollection);
 
     // -----------------------------------------------------
     // Use network for recognition
