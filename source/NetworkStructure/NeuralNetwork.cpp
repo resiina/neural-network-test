@@ -85,6 +85,8 @@ void NeuralNetwork::clear()
 
 void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
-    // TODO
+    // TODO:
+    // 1. Define cost function
+    // 2. Train the network by minimizing the cost function using gradient descent
 }
 
