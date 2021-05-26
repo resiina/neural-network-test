@@ -88,14 +88,6 @@ int main()
 
         const double activation = (red + green + blue) / 3.0 / 255.0; // Gray [0, 1]
         neuron->setActivation(activation);
-
-        if (activation != 0.0)
-        {
-            // Only print positive activations (not black)
-            std::cout << activation;
-        }
-
-        std::cout << std::endl;
     }
 
     // 2. Compute results
