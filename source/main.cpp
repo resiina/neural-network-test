@@ -10,8 +10,6 @@
 
 #include "TrainingDataCollection.h"
 
-const size_t bytesPerPixel = 4;
-
 int main()
 {
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -51,48 +49,7 @@ int main()
     
     // Collect training data
     std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
-    for (size_t number = 0; number < 10; number++)
-    {
-        namespace fs = std::filesystem;
-
-        std::shared_ptr<LabelTrainingData> labelTrainingData = std::make_shared<LabelTrainingData>(); 
-        for (auto & entry : fs::directory_iterator("../../data/training/" + std::to_string(number)))
-        {
-            const std::string trainingFilePath = entry.path().string();
-            
-            std::vector<unsigned char> trainingImageData;
-            unsigned int imageWidth;
-            unsigned int imageHeight;
-
-            const unsigned int pngDecodeResult = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath);
-            if (pngDecodeResult != 0)
-            {
-                std::cout << "Loading PNG failed." << std::endl
-                          << "Decoder error " << pngDecodeResult << ": " << lodepng_error_text(pngDecodeResult) << std::endl;
-                return -1;
-            }
-
-            std::shared_ptr<LabelTrainingExample> trainingExample = std::make_shared<LabelTrainingExample>();
-            for (size_t i = 0; i < trainingImageData.size(); i += bytesPerPixel)
-            {
-                const unsigned char & red   = trainingImageData.at(i);
-                const unsigned char & green = trainingImageData.at(i + 1);
-                const unsigned char & blue  = trainingImageData.at(i + 2);
-                //const unsigned char & alpha = trainingImageData.at(i + 3);
-
-                const double activation = (red + green + blue) / 3.0 / 255.0; // Gray [0, 1]
-                trainingExample->activations.push_back(activation);
-            }
-            
-            trainingExample->label = number;
-
-            labelTrainingData->trainingExamples.push_back(trainingExample);
-        }
-
-        labelTrainingData->label = number;
-
-        trainingDataCollection->labelTrainingData.push_back(labelTrainingData);
-    }
+    trainingDataCollection->collect("../../data/training/");
 
     // TODO
 
@@ -118,6 +75,7 @@ int main()
         return -1;
     }
 
+    const size_t bytesPerPixel = 4;
     for (size_t i = 0; i < testImageData.size(); i += bytesPerPixel)
     {
         const unsigned char & red   = testImageData.at(i);

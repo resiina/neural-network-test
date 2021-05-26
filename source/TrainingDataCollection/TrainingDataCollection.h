@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 struct LabelTrainingExample
 {
@@ -17,9 +18,15 @@ struct LabelTrainingData
     std::vector<std::shared_ptr<LabelTrainingExample>> trainingExamples; // individual training examples
 };
 
-struct TrainingDataCollection
+class TrainingDataCollection
 {
-    std::vector<std::shared_ptr<LabelTrainingData>> labelTrainingData;
+public:
+
+    bool collect(const std::string & trainingDataPath);
+
+private:
+
+    std::vector<std::shared_ptr<LabelTrainingData>> myLabelTrainingData;
 };
 
 #endif
