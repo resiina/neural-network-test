@@ -8,6 +8,7 @@ aux_source_directory(source/NetworkStructure applicationSources)
 list(APPEND applicationIncludeDirectories
     source
     source/NetworkStructure
+    source/TrainingDataCollection
 )
 
 list(APPEND externalSources

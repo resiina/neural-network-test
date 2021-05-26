@@ -1,7 +1,6 @@
 #include <iostream>
 #include <iomanip>
 #include <filesystem>
-#include <memory>
 
 #include "lodepng.h"
 
@@ -9,23 +8,7 @@
 #include "NeuronLayer.h"
 #include "Neuron.h"
 
-struct TrainingExample
-{
-    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
-    //std::vector<unsigned char> data; // RGBA [0, 255]
-    std::vector<double> activations; // BW [0, 1]
-};
-
-struct LabelTrainingData
-{
-    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
-    std::vector<std::shared_ptr<TrainingExample>> trainingExamples; // individual training examples
-};
-
-struct TrainingDataCollection
-{
-    std::vector<std::shared_ptr<LabelTrainingData>> labelTrainingData;
-};
+#include "TrainingDataCollection.h"
 
 const size_t bytesPerPixel = 4;
 
@@ -67,7 +50,7 @@ int main()
     // -----------------------------------------------------
     
     // Collect training data
-    TrainingDataCollection trainingDataCollection;
+    std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
     for (size_t number = 0; number < 10; number++)
     {
         namespace fs = std::filesystem;
@@ -81,7 +64,7 @@ int main()
             unsigned int imageWidth;
             unsigned int imageHeight;
 
-            const unsigned int pngDecodeResult = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath.c_str());
+            const unsigned int pngDecodeResult = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath);
             if (pngDecodeResult != 0)
             {
                 std::cout << "Loading PNG failed." << std::endl
@@ -89,7 +72,7 @@ int main()
                 return -1;
             }
 
-            std::shared_ptr<TrainingExample> trainingExample = std::make_shared<TrainingExample>();
+            std::shared_ptr<LabelTrainingExample> trainingExample = std::make_shared<LabelTrainingExample>();
             for (size_t i = 0; i < trainingImageData.size(); i += bytesPerPixel)
             {
                 const unsigned char & red   = trainingImageData.at(i);
@@ -108,12 +91,12 @@ int main()
 
         labelTrainingData->label = number;
 
-        trainingDataCollection.labelTrainingData.push_back(labelTrainingData);
+        trainingDataCollection->labelTrainingData.push_back(labelTrainingData);
     }
 
     // TODO
 
-    //network.train(trainingImageDataCollection);
+    //network.train(trainingDataCollection);
 
     // -----------------------------------------------------
     // Use network for recognition
