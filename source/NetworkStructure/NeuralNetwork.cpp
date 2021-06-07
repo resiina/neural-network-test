@@ -90,8 +90,8 @@ void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & traini
     // 2. Train the network by minimizing the cost function using gradient descent
 }
 
-double costFunction(const std::vector<double> & actualActivations,
-                    const std::vector<double> & goalActivations)
+double NeuralNetwork::costFunction(const std::vector<double> & actualActivations,
+                                   const std::vector<double> & goalActivations)
 {
     // In the goal activations, one index should have activation of 1.0 and the rest should be 0.0
     // The actual activations should be the actual output activations that the network currently outputs with specified inputs

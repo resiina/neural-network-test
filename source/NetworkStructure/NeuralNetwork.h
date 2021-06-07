@@ -30,6 +30,9 @@ public:
 
 private:
     std::vector<std::shared_ptr<NeuronLayer>> myNeuronLayers;
+    
+    static double costFunction(const std::vector<double> & actualActivations,
+                               const std::vector<double> & goalActivations);
 };
 
 #endif // NEURALNETWORK_H
