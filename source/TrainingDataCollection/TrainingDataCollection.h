@@ -7,14 +7,12 @@
 
 struct LabelTrainingExample
 {
-    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
-    //std::vector<unsigned char> data; // RGBA [0, 255]
-    std::vector<double> activations; // BW [0, 1]
+    std::vector<double> inputLayerActivations; // BW [0, 1]
+    std::vector<double> goalOutputLayerActivations; // BW [0, 1], only one index should have value 1.0, rest 0.0
 };
 
 struct LabelTrainingData
 {
-    size_t label; // output layer index that should have activation 1 and the rest 0 [0, 9]
     std::vector<std::shared_ptr<LabelTrainingExample>> trainingExamples; // individual training examples
 };
 
@@ -22,11 +20,12 @@ class TrainingDataCollection
 {
 public:
 
-    bool collect(const std::string & trainingDataPath);
+    const bool collect(const std::string & trainingDataPath);
+    const std::vector<std::shared_ptr<LabelTrainingData>> & getLabelsTrainingData() const;
 
 private:
 
-    std::vector<std::shared_ptr<LabelTrainingData>> myLabelTrainingData;
+    std::vector<std::shared_ptr<LabelTrainingData>> myLabelsTrainingData;
 };
 
 #endif

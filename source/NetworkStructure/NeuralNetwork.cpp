@@ -3,6 +3,8 @@
 #include "NeuronLayer.h"
 #include "Neuron.h"
 
+#include "TrainingDataCollection.h"
+
 NeuralNetwork::NeuralNetwork()
 {
 
@@ -85,13 +87,33 @@ void NeuralNetwork::clear()
 
 void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
-    // TODO:
-    // 1. Define cost function
-    // 2. Train the network by minimizing the cost function using gradient descent
+    std::shared_ptr<NeuronLayer> inputLayer = getFirstNeuronLayer();
+
+    const std::vector<std::shared_ptr<LabelTrainingData>> & labelsTrainingData = trainingDataCollection->getLabelsTrainingData();
+    for (const auto & labelTrainingData : labelsTrainingData)
+    {
+        for (const auto & trainingExample : labelTrainingData->trainingExamples)
+        {
+            // 1. Set input layer activations based on input image
+            inputLayer->setActivations(trainingExample->inputLayerActivations);
+
+            // 2. Compute results
+            compute();
+
+            // 3. Calculate output cost
+            const double cost = calculateCost(getLastNeuronLayer()->getActivations(),
+                                              trainingExample->goalOutputLayerActivations);
+            
+            // TODO:
+            // 4. Calculate the gradient descent
+            // 5. Adjust the weights and biases according to the gradient
+            // 
+        }
+    }
 }
 
-double NeuralNetwork::costFunction(const std::vector<double> & actualActivations,
-                                   const std::vector<double> & goalActivations)
+double NeuralNetwork::calculateCost(const std::vector<double> & actualActivations,
+                                    const std::vector<double> & goalActivations)
 {
     // In the goal activations, one index should have activation of 1.0 and the rest should be 0.0
     // The actual activations should be the actual output activations that the network currently outputs with specified inputs

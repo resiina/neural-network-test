@@ -9,6 +9,33 @@ NeuronLayer::NeuronLayer()
 {
 
 }
+    
+const std::vector<double> & NeuronLayer::getActivations() const
+{
+    std::vector<double> activations;
+    for (const auto & neuron : myNeurons)
+    {
+        activations.push_back(neuron->getActivation());
+    }
+
+    return activations;
+}
+
+bool NeuronLayer::setActivations(const std::vector<double> & activations)
+{
+    if (activations.size() != myNeurons.size())
+    {
+        // Neurons and activations sizes mismatch
+        return false;
+    }
+
+    for (size_t i = 0; i < myNeurons.size(); i++)
+    {
+        myNeurons.at(i)->setActivation(activations.at(i));
+    }
+
+    return true;
+}
 
 std::shared_ptr<Neuron> NeuronLayer::getNeuron(const size_t index) const
 {

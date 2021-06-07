@@ -5,7 +5,7 @@
 
 #include "lodepng.h"
 
-bool TrainingDataCollection::collect(const std::string & trainingDataPath)
+const bool TrainingDataCollection::collect(const std::string & trainingDataPath)
 {
     for (size_t number = 0; number < 10; number++)
     {
@@ -39,18 +39,22 @@ bool TrainingDataCollection::collect(const std::string & trainingDataPath)
                 //const unsigned char & alpha = trainingImageData.at(i + 3);
 
                 const double activation = (red + green + blue) / 3.0 / 255.0; // Gray [0, 1]
-                trainingExample->activations.push_back(activation);
+                trainingExample->inputLayerActivations.push_back(activation);
             }
-            
-            trainingExample->label = number;
+
+            trainingExample->goalOutputLayerActivations = std::vector<double>(10, 0.0);
+            trainingExample->goalOutputLayerActivations.at(number) = 1.0;
 
             labelTrainingData->trainingExamples.push_back(trainingExample);
         }
 
-        labelTrainingData->label = number;
-
-        myLabelTrainingData.push_back(labelTrainingData);
+        myLabelsTrainingData.push_back(labelTrainingData);
     }
 
     return true;
+}
+
+const std::vector<std::shared_ptr<LabelTrainingData>> & TrainingDataCollection::getLabelsTrainingData() const
+{
+    return myLabelsTrainingData;
 }
