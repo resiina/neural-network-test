@@ -105,10 +105,12 @@ void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & traini
                                               trainingExample->goalOutputLayerActivations);
             
             // TODO:
-            // 4. Calculate the gradient descent
-            // 5. Adjust the weights and biases according to the gradient
-            // 
+            // 4. Do back propagation
         }
+        
+        // TODO:
+        // - Calculate the gradient descent
+        // - Adjust the weights and biases according to the gradient
     }
 }
 
