@@ -5,6 +5,9 @@
 
 #include "TrainingDataCollection.h"
 
+#include <stdexcept>
+#include <iostream>
+
 NeuralNetwork::NeuralNetwork()
 {
 
@@ -104,6 +107,8 @@ void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & traini
             const double cost = calculateCost(getLastNeuronLayer()->getActivations(),
                                               trainingExample->goalOutputLayerActivations);
             
+            std::cout << "Cost: " << cost << std::endl;
+
             // TODO:
             // 4. Do back propagation
         }
@@ -121,7 +126,7 @@ double NeuralNetwork::calculateCost(const std::vector<double> & actualActivation
     // The actual activations should be the actual output activations that the network currently outputs with specified inputs
     if (actualActivations.size() != goalActivations.size())
     {
-        // Error
+        throw std::runtime_error("Actual and goal activations sizes differ");
     }
 
     double totalCost = 0.0;

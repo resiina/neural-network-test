@@ -25,8 +25,7 @@ bool NeuronLayer::setActivations(const std::vector<double> & activations)
 {
     if (activations.size() != myNeurons.size())
     {
-        // Neurons and activations sizes mismatch
-        return false;
+        throw std::runtime_error("Neurons and activations sizes mismatch");
     }
 
     for (size_t i = 0; i < myNeurons.size(); i++)

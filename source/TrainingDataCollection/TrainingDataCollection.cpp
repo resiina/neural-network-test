@@ -1,6 +1,5 @@
 #include "TrainingDataCollection.h"
 
-#include <iostream>
 #include <filesystem>
 
 #include "lodepng.h"
@@ -23,9 +22,9 @@ const bool TrainingDataCollection::collect(const std::string & trainingDataPath)
             const unsigned int pngDecodeResult = lodepng::decode(trainingImageData, imageWidth, imageHeight, trainingFilePath);
             if (pngDecodeResult != 0)
             {
-                std::cout << "Loading PNG failed." << std::endl
-                          << "Decoder error " << pngDecodeResult << ": " << lodepng_error_text(pngDecodeResult) << std::endl;
-                return false;
+                std::stringstream ss;
+                ss << "Loading PNG Failed. Decoder error " << pngDecodeResult << ": " << lodepng_error_text(pngDecodeResult);
+                throw std::runtime_error(ss.str());
             }
 
             std::shared_ptr<LabelTrainingExample> trainingExample = std::make_shared<LabelTrainingExample>();
