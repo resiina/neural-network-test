@@ -106,13 +106,13 @@ void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & traini
             // 3. Calculate output cost
             const double cost = calculateCost(getLastNeuronLayer()->getActivations(),
                                               trainingExample->goalOutputLayerActivations);
-            
+
             std::cout << "Cost: " << cost << std::endl;
 
             // TODO:
             // 4. Do back propagation
         }
-        
+
         // TODO:
         // - Calculate the gradient descent
         // - Adjust the weights and biases according to the gradient
