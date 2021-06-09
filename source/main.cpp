@@ -12,10 +12,16 @@
 
 void printSectionTitle(const std::string & sectionTitle)
 {
-    std::cout <<
-    "-----------------------------------------------------" << std::endl <<
-    sectionTitle << std::endl <<
-    "-----------------------------------------------------" << std::endl;
+    std::cout << "__________________________________________________________" << std::endl;
+    
+    std::cout << sectionTitle << std::endl;
+    
+    for (const char & character : sectionTitle)
+    {
+        std::cout << '-';
+    }
+
+    std::cout << std::endl;
 }
 
 int main()
