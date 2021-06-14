@@ -12,16 +12,24 @@
 
 void printSectionTitle(const std::string & sectionTitle)
 {
-    std::cout << "__________________________________________________________" << std::endl;
-    
-    std::cout << sectionTitle << std::endl;
-    
-    for (const char & character : sectionTitle)
-    {
-        std::cout << '-';
-    }
+    using namespace std;
 
-    std::cout << std::endl;
+    static unsigned int sectionNumber = 1;
+    const string finalSectionTitle = to_string(sectionNumber) + ". " + sectionTitle;
+
+    const string horizontalLine = "  " + string(finalSectionTitle.length() + 4, '#');
+    const string spacingRow = "  # " + string(finalSectionTitle.length(), ' ') + " #";
+    const string sectionRow = "  # " + finalSectionTitle + " #";
+    
+    cout << string(70, '_') << endl << endl; // Section separator line
+
+    cout << horizontalLine << endl;
+    cout << spacingRow << endl;
+    cout << sectionRow << endl;
+    cout << spacingRow << endl;
+    cout << horizontalLine << endl << endl;
+
+    sectionNumber++;
 }
 
 int main()
