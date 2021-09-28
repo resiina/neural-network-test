@@ -88,7 +88,7 @@ void NeuralNetwork::clear()
     myNeuronLayers.clear();
 }
 
-void NeuralNetwork::randomize(const double factor)
+void NeuralNetwork::mutate(const double factor)
 {
     auto getUnitMutator = []()
     {

@@ -145,8 +145,8 @@ int main()
 
                 if (networkIndex != bestNetworkIndex)
                 {
-                    // Randomize values a bit
-                    network.randomize(0.1);
+                    // Mutate values a bit
+                    network.mutate(0.1);
                 }
             }
         }

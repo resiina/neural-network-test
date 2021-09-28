@@ -26,7 +26,7 @@ public:
     void connectLayers();
     void clear();
 
-    void randomize(const double factor);
+    void mutate(const double factor);
 
     void train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
 
