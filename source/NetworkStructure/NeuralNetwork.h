@@ -26,13 +26,16 @@ public:
     void connectLayers();
     void clear();
 
+    void randomize(const double factor);
+
     void train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
+
+    static double calculateCost(const std::vector<double> & actualActivations,
+                                const std::vector<double> & goalActivations);
 
 private:
     std::vector<std::shared_ptr<NeuronLayer>> myNeuronLayers;
     
-    static double calculateCost(const std::vector<double> & actualActivations,
-                                const std::vector<double> & goalActivations);
 };
 
 #endif // NEURALNETWORK_H

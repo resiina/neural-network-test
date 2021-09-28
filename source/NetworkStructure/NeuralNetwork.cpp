@@ -88,6 +88,28 @@ void NeuralNetwork::clear()
     myNeuronLayers.clear();
 }
 
+void NeuralNetwork::randomize(const double factor)
+{
+    auto getUnitMutator = []()
+    {
+        return (std::rand() % 200) / 100.0 - 1.0; // Something between -1 and 1
+    };
+
+    for (size_t i = 0; i < myNeuronLayers.size(); i++)
+    {
+        auto & neurons = myNeuronLayers.at(i)->getNeurons();
+        for (auto & neuron : neurons)
+        {
+            neuron->setBias(neuron->getBias() + getUnitMutator() * factor);
+
+            for (auto & nextConnection : neuron->getNextConnections())
+            {
+                nextConnection->setWeight(nextConnection->getWeight() + getUnitMutator() * factor);
+            }
+        }
+    }
+}
+
 void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
     std::shared_ptr<NeuronLayer> inputLayer = getFirstNeuronLayer();
