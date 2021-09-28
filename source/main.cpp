@@ -45,9 +45,10 @@ int main()
 
         printSectionTitle("Construct the network");
 
-        std::vector<NeuralNetwork> networks;
+        const size_t networksPerGeneration = 20;
 
-        for (int i = 0; i < 20; i++)
+        std::vector<NeuralNetwork> networks;
+        for (int networkIndex = 0; networkIndex < networksPerGeneration; networkIndex++)
         {
             NeuralNetwork network;
 
@@ -84,9 +85,10 @@ int main()
 
         //network.train(trainingDataCollection);
         
-        const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples.size();
+        const size_t totalGenerations = 10000;
 
-        for (int generation = 0; generation < 10000; generation++)
+        const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples.size();
+        for (int generation = 0; generation < totalGenerations; generation++)
         {
             size_t bestNetworkIndex = 0;
             double bestNetworkCost = std::numeric_limits<double>::max();
@@ -146,7 +148,8 @@ int main()
                 if (networkIndex != bestNetworkIndex)
                 {
                     // Mutate values a bit
-                    network.mutate(0.01);
+                    const double mutationStrength = 0.01;
+                    network.mutate(mutationStrength);
                 }
             }
         }
