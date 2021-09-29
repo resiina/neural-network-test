@@ -78,7 +78,7 @@ int main()
         
         const size_t totalGenerations = 10000;
 
-        const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples.size();
+        const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples.size();
         for (int generation = 1; generation <= totalGenerations; generation++)
         {
             size_t bestNetworkIndex = 0;
@@ -91,7 +91,7 @@ int main()
                 {
                     // 1. Get a random image of 0
                     const size_t trainingExampleIndex = std::rand() % trainingExamplesSize;
-                    const auto & trainingExampleActivations = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples[trainingExampleIndex]->inputLayerActivations;
+                    const auto & trainingExampleActivations = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples[trainingExampleIndex]->inputLayerActivations;
 
                     network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
 
@@ -99,7 +99,7 @@ int main()
                     network.compute();
 
                     // 3. Compare output to goal
-                    const auto & goalOutputActivations = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
+                    const auto & goalOutputActivations = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
 
                     const double cost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), goalOutputActivations);
 
