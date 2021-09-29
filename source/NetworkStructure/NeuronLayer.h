@@ -22,6 +22,9 @@ public:
     void connectPrevLayerNeurons(std::shared_ptr<NeuronLayer> prevLayer);
     void clear();
 
+    // Deep copy
+    void operator=(const NeuronLayer & other);
+
 private:
     std::vector<std::shared_ptr<Neuron>> myNeurons;
 };

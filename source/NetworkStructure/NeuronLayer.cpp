@@ -97,3 +97,16 @@ void NeuronLayer::connectPrevLayerNeurons(std::shared_ptr<NeuronLayer> prevLayer
         }
     }
 }
+
+void NeuronLayer::operator=(const NeuronLayer & other)
+{
+    myNeurons.clear();
+
+    for (auto & otherNeuron : other.getNeurons())
+    {
+        std::shared_ptr<Neuron> neuronCopy = std::make_shared<Neuron>();
+        *(neuronCopy.get()) = *(otherNeuron.get());
+
+        myNeurons.push_back(neuronCopy);
+    }
+}

@@ -161,6 +161,41 @@ void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & traini
     }
 }
 
+void NeuralNetwork::operator=(const NeuralNetwork & other)
+{
+    myNeuronLayers.clear();
+
+    auto & otherNeuronLayers = other.getNeuronLayers();
+    for (auto & otherNeuronLayer : otherNeuronLayers)
+    {
+        std::shared_ptr<NeuronLayer> neuronLayerCopy = std::make_shared<NeuronLayer>();
+        *(neuronLayerCopy.get()) = *(otherNeuronLayer.get());
+
+        myNeuronLayers.push_back(neuronLayerCopy);
+    }
+
+    // Create new connections
+    connectLayers();
+
+    // Copy connection weights
+    for (size_t neuronLayerIndex = 0; neuronLayerIndex < myNeuronLayers.size(); neuronLayerIndex++)
+    {
+        auto & neurons = myNeuronLayers.at(neuronLayerIndex)->getNeurons();
+        auto & otherNeurons = otherNeuronLayers.at(neuronLayerIndex)->getNeurons();
+        for (size_t neuronIndex = 0; neuronIndex < neurons.size(); neuronIndex++)
+        {
+            auto & neuronConnections = neurons.at(neuronIndex)->getNextConnections();
+            auto & otherNeuronConnections = otherNeurons.at(neuronIndex)->getNextConnections();
+            for (size_t connectionIndex = 0; connectionIndex < neuronConnections.size(); connectionIndex++)
+            {
+                auto & neuronConnection = neuronConnections.at(connectionIndex);
+                auto & otherNeuronConnection = otherNeuronConnections.at(connectionIndex);
+                neuronConnection->setWeight(otherNeuronConnection->getWeight());
+            }
+        }
+    }
+}
+
 double NeuralNetwork::calculateCost(const std::vector<double> & actualActivations,
                                     const std::vector<double> & goalActivations)
 {

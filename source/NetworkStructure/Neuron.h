@@ -26,6 +26,8 @@ public:
     std::vector<std::shared_ptr<NeuronConnection>> getNextConnections();
     void appendNextConnection(std::shared_ptr<NeuronConnection> connection);
 
+    void operator=(const Neuron & other);
+
 private:
     double myActivation;
     double myBias;

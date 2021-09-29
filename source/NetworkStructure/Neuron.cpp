@@ -75,3 +75,9 @@ void Neuron::appendNextConnection(std::shared_ptr<NeuronConnection> connection)
 {
     myNextConnections.push_back(connection);
 }
+
+void Neuron::operator=(const Neuron & other)
+{
+    myActivation = other.myActivation;
+    myBias = other.myBias;
+}

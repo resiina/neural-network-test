@@ -35,6 +35,9 @@ public:
 
     void train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
 
+    // Deep copy
+    void operator=(const NeuralNetwork & other);
+
     static double calculateCost(const std::vector<double> & actualActivations,
                                 const std::vector<double> & goalActivations);
 
