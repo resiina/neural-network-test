@@ -87,7 +87,7 @@ int main()
             {
                 NeuralNetwork & network = networks.at(networkIndex);
 
-                for (int trainingExampleNumber = 0; trainingExampleNumber < 10; trainingExampleNumber++)
+                for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
                 {
                     // 1. Get a random image of 0
                     const size_t trainingExampleIndex = std::rand() % trainingExamplesSize;
