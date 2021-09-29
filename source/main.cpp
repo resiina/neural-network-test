@@ -84,8 +84,7 @@ int main()
 
         printSectionTitle("Train the network");
         
-        const size_t totalGenerations = 10000;
-
+        const size_t totalGenerations = 45000;
         for (int generation = 1; generation <= totalGenerations; generation++)
         {
             size_t bestNetworkIndex = 0;
