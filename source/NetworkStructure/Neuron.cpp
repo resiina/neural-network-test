@@ -15,7 +15,7 @@ void Neuron::computeActivation()
     for (auto connection : myPrevConnections)
     {
         const double weight = connection->getWeight();
-        const double connectedActivation = connection->getConnectedNeuron()->getActivation();
+        const double connectedActivation = connection->getConnectedNeuron().lock()->getActivation();
 
         sum += weight * connectedActivation;
     }
