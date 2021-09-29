@@ -78,7 +78,6 @@ int main()
         
         const size_t totalGenerations = 10000;
 
-        const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples.size();
         for (int generation = 1; generation <= totalGenerations; generation++)
         {
             size_t bestNetworkIndex = 0;
@@ -87,11 +86,15 @@ int main()
             {
                 NeuralNetwork & network = networks.at(networkIndex);
 
+                double totalExamplesCost = std::numeric_limits<double>::max();
                 for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
                 {
-                    // 1. Get a random image of 0
-                    const size_t trainingExampleIndex = std::rand() % trainingExamplesSize;
-                    const auto & trainingExampleActivations = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples[trainingExampleIndex]->inputLayerActivations;
+                    // 1. Get a random image of random number between 0-10
+                    const size_t trainingExampleActualNumber = std::rand() % 10;
+                    const auto & trainingExamples = trainingDataCollection->getLabelsTrainingData()[trainingExampleActualNumber]->trainingExamples;
+
+                    const size_t trainingExampleIndex = std::rand() % trainingExamples.size();
+                    const auto & trainingExampleActivations = trainingExamples[trainingExampleIndex]->inputLayerActivations;
 
                     network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
 
@@ -99,15 +102,16 @@ int main()
                     network.compute();
 
                     // 3. Compare output to goal
-                    const auto & goalOutputActivations = trainingDataCollection->getLabelsTrainingData()[5]->trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
+                    const auto & goalOutputActivations = trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
 
                     const double cost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), goalOutputActivations);
+                    totalExamplesCost += cost;
+                }
 
-                    if (cost < bestNetworkCost)
-                    {
-                        bestNetworkCost = cost;
-                        bestNetworkIndex = networkIndex;
-                    }
+                if (totalExamplesCost < bestNetworkCost)
+                {
+                    bestNetworkCost = totalExamplesCost;
+                    bestNetworkIndex = networkIndex;
                 }
             }
 
@@ -116,9 +120,25 @@ int main()
                 generation == totalGenerations ||
                 generation % 50 == 0)
             {
+                // Setup a test for the best performing network
+                const size_t testingActualNumber = std::rand() % 10;
+                const auto & testingExamples = trainingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
+                const size_t testingExampleIndex = std::rand() % testingExamples.size();
+                const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
+
+                bestNetwork.getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
+
+                // Execute test
+                bestNetwork.compute();
+
+                const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
+
+                const double testExampleCost = NeuralNetwork::calculateCost(bestNetwork.getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
+
                 // Show performance of current best network
-                std::cout << "Best cost of generation " << generation << ": " << bestNetworkCost << std::endl;
-                std::cout << "Output layer activations:" << std::endl;
+                std::cout << "Best cost of generation " << generation << ": " << testExampleCost << std::endl;
+                std::cout << "Output layer activations for actual number " << testingActualNumber << ":" << std::endl;
+                
                 const auto & outputLayerNeurons = bestNetwork.getLastNeuronLayer()->getNeurons();
                 for (size_t i = 0; i < outputLayerNeurons.size(); i++)
                 {

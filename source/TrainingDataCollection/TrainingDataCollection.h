@@ -8,7 +8,7 @@
 struct LabelTrainingExample
 {
     std::vector<double> inputLayerActivations; // BW [0, 1]
-    std::vector<double> goalOutputLayerActivations; // BW [0, 1], only one index should have value 1.0, rest 0.0
+    std::vector<double> goalOutputLayerActivations; // [0, 1], only one index should have value 1.0, rest 0.0
 };
 
 struct LabelTrainingData
