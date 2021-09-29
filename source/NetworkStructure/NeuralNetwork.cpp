@@ -172,11 +172,26 @@ double NeuralNetwork::calculateCost(const std::vector<double> & actualActivation
     }
 
     double totalCost = 0.0;
-    for (int i = 0; i < actualActivations.size(); i++)
+    for (size_t i = 0; i < actualActivations.size(); i++)
     {
         const double difference = actualActivations.at(i) - goalActivations.at(i);
         totalCost += difference * difference;
     }
+
+    size_t correctIndex = 0;
+    double highestGoalActivation = 0.0;
+    for (size_t i = 0; i < goalActivations.size(); i++)
+    {
+        if (highestGoalActivation < goalActivations.at(i))
+        {
+            highestGoalActivation = goalActivations.at(i);
+            correctIndex = i;
+        }
+    }
+
+    // Add extra cost from difference with the correct classification result
+    const double differenceCorrect = actualActivations.at(correctIndex) - goalActivations.at(correctIndex);
+    totalCost += 10 * std::abs(differenceCorrect);
 
     return totalCost;
 }
