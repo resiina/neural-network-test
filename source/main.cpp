@@ -44,6 +44,11 @@ int main()
         const unsigned int inputImageWidth = 28;
         const unsigned int inputImageHeight = 28;
 
+        const size_t inputLayerNeuronCount = inputImageWidth * inputImageHeight;
+        const size_t outputLayerNeuronCount = 10;
+        const size_t hiddenLayerCount = 2;
+        const size_t hiddenLayerNeuronCount = 16;
+
         printSectionTitle("Construct the network");
 
         const size_t networksPerGeneration = 20;
@@ -55,7 +60,10 @@ int main()
 
             // Input layer takes all image pixels as activations
             // Network outputs 10 different possible results, an integer from 0 to 9
-            network.initialize(inputImageWidth * inputImageHeight, 10, 2, 16);
+            network.initialize(inputLayerNeuronCount,
+                               outputLayerNeuronCount,
+                               hiddenLayerCount,
+                               hiddenLayerNeuronCount);
 
             networks.push_back(network);
         }
@@ -144,7 +152,10 @@ int main()
                 {
                     // Generate totally new ones for the other half of the population
                     network = NeuralNetwork();
-                    network.initialize(inputImageWidth * inputImageHeight, 10, 2, 16);
+                    network.initialize(inputLayerNeuronCount,
+                                       outputLayerNeuronCount,
+                                       hiddenLayerCount,
+                                       hiddenLayerNeuronCount);
                 }
             }
         }

@@ -13,10 +13,10 @@ NeuralNetwork::NeuralNetwork()
 
 }
 
-void NeuralNetwork::initialize(const int inputLayerNeuronCount,
-                               const int outputLayerNeuronCount,
-                               const int hiddenLayerCount,
-                               const int hiddenLayerNeuronCount)
+void NeuralNetwork::initialize(const size_t inputLayerNeuronCount,
+                               const size_t outputLayerNeuronCount,
+                               const size_t hiddenLayerCount,
+                               const size_t hiddenLayerNeuronCount)
 {
     // 1. Define input layer
     appendNeuronLayer(inputLayerNeuronCount);

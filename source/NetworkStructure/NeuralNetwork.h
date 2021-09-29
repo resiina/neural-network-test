@@ -12,10 +12,10 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
-    void initialize(const int inputLayerNeuronCount,
-                    const int outputLayerNeuronCount,
-                    const int hiddenLayerCount,
-                    const int hiddenLayerNeuronCount);
+    void initialize(const size_t inputLayerNeuronCount,
+                    const size_t outputLayerNeuronCount,
+                    const size_t hiddenLayerCount,
+                    const size_t hiddenLayerNeuronCount);
 
     void compute();
 
