@@ -139,9 +139,9 @@ int main()
                     continue;
                 }
 
-                if (networkIndex <= networksPerGeneration / 2)
+                if (networkIndex >= networksPerGeneration / 5)
                 {
-                    // Copy best network to half of the population
+                    // Copy best network to 4/5 of the population
                     network = bestNetwork;
 
                     // Mutate values a bit
@@ -150,7 +150,7 @@ int main()
                 }
                 else
                 {
-                    // Generate totally new ones for the other half of the population
+                    // Generate totally new ones for the rest of the population
                     network = NeuralNetwork();
                     network.initialize(inputLayerNeuronCount,
                                        outputLayerNeuronCount,
