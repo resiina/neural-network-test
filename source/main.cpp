@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <filesystem>
 #include <limits>
+#include <chrono>
 
 #include "lodepng.h"
 
@@ -39,6 +40,13 @@ int main()
     {
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
         std::cout << std::setprecision(2);
+        
+        using std::chrono::high_resolution_clock;
+        using std::chrono::duration_cast;
+        using std::chrono::duration;
+        using std::chrono::milliseconds;
+
+        const auto timeStart = high_resolution_clock::now();
 
         // -----------------------------------------------------
         const unsigned int inputImageWidth = 28;
@@ -145,6 +153,13 @@ int main()
                     const auto & outputNeuron = outputLayerNeurons.at(i);
                     std::cout << i << ": " << outputNeuron->getActivation() << std::endl;
                 }
+                
+                std::cout << std::endl << std::endl;
+
+                // Show seconds since starting the program
+                const auto timeNow = high_resolution_clock::now();
+                auto seconds = duration_cast<std::chrono::seconds>(timeNow - timeStart);
+                std::cout << seconds.count() << " seconds" << std::endl;
                 std::cout << std::endl << std::endl;
             }
 
