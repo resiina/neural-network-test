@@ -111,7 +111,7 @@ int main()
                 }
             }
 
-            NeuralNetwork bestNetwork = networks.at(bestNetworkIndex); // TODO: Do deep copy
+            NeuralNetwork bestNetwork = networks.at(bestNetworkIndex);
             if (generation == 1 ||
                 generation == totalGenerations ||
                 generation % 50 == 0)
