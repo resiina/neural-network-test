@@ -72,7 +72,7 @@ int main()
         const size_t totalGenerations = 10000;
 
         const size_t trainingExamplesSize = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples.size();
-        for (int generation = 0; generation < totalGenerations; generation++)
+        for (int generation = 1; generation <= totalGenerations; generation++)
         {
             size_t bestNetworkIndex = 0;
             double bestNetworkCost = std::numeric_limits<double>::max();
@@ -108,7 +108,9 @@ int main()
             }
 
             NeuralNetwork bestNetwork = networks.at(bestNetworkIndex);
-            if (generation % 50 == 0)
+            if (generation == 1 ||
+                generation == totalGenerations ||
+                generation % 50 == 0)
             {
                 // Show performance of current best network
                 std::cout << "Best cost of generation " << generation << ": " << bestNetworkCost << std::endl;
