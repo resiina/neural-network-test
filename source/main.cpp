@@ -86,7 +86,6 @@ int main()
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
-                //printSectionTitle("Use network for recognition");
 
                 for (int trainingExampleNumber = 0; trainingExampleNumber < 10; trainingExampleNumber++)
                 {
