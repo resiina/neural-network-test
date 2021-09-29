@@ -10,7 +10,7 @@ NeuronLayer::NeuronLayer()
 
 }
     
-const std::vector<double> & NeuronLayer::getActivations() const
+const std::vector<double> NeuronLayer::getActivations() const
 {
     std::vector<double> activations;
     for (const auto & neuron : myNeurons)

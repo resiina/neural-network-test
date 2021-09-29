@@ -11,7 +11,7 @@ class NeuronLayer
 public:
     NeuronLayer();
     
-    const std::vector<double> & getActivations() const;
+    const std::vector<double> getActivations() const;
     bool setActivations(const std::vector<double> & activations);
 
     std::shared_ptr<Neuron> getNeuron(const size_t index) const;
