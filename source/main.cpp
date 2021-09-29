@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <limits>
 #include <chrono>
+#include <ctime>
 
 #include "lodepng.h"
 
@@ -158,7 +159,13 @@ int main()
                 // Show seconds since starting the program
                 const auto timeNow = high_resolution_clock::now();
                 auto seconds = duration_cast<std::chrono::seconds>(timeNow - timeStart);
-                std::cout << seconds.count() << " seconds" << std::endl;
+                std::cout << seconds.count() << " seconds since start" << std::endl;
+
+                // Show current date and time
+                auto now = std::chrono::system_clock::now();
+                std::time_t currentDateTime = std::chrono::system_clock::to_time_t(now);
+                std::cout << std::ctime(&currentDateTime) << std::endl;
+
                 std::cout << std::endl << std::endl;
             }
 
