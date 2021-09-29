@@ -52,25 +52,9 @@ int main()
         {
             NeuralNetwork network;
 
-            // 1. Define input layer
             // Input layer takes all image pixels as activations
-            const size_t inputLayerNeuronCount = inputImageWidth * inputImageHeight;
-            network.appendNeuronLayer(inputLayerNeuronCount);
-
-            // 2. Define some hidden layers
-            const size_t hiddenLayerCount = 2;
-            const size_t hiddenLayerNeuronCount = 16;
-            for (size_t hiddenLayerIndex = 0; hiddenLayerIndex < hiddenLayerCount; hiddenLayerIndex++)
-            {
-                network.appendNeuronLayer(hiddenLayerNeuronCount);
-            }
-            
-            // 3. Define output layer
             // Network outputs 10 different possible results, an integer from 0 to 9
-            const int outputLayerNeuronCount = 10;
-            network.appendNeuronLayer(outputLayerNeuronCount);
-
-            network.connectLayers();
+            network.initialize(inputImageWidth * inputImageHeight, 10, 2, 16);
 
             networks.push_back(network);
         }

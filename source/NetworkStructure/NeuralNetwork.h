@@ -12,6 +12,11 @@ class NeuralNetwork
 public:
     NeuralNetwork();
 
+    void initialize(const int inputLayerNeuronCount,
+                    const int outputLayerNeuronCount,
+                    const int hiddenLayerCount,
+                    const int hiddenLayerNeuronCount);
+
     void compute();
 
     std::vector<std::shared_ptr<NeuronLayer>> getNeuronLayers() const;

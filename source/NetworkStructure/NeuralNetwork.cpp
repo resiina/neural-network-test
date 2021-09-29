@@ -13,6 +13,26 @@ NeuralNetwork::NeuralNetwork()
 
 }
 
+void NeuralNetwork::initialize(const int inputLayerNeuronCount,
+                               const int outputLayerNeuronCount,
+                               const int hiddenLayerCount,
+                               const int hiddenLayerNeuronCount)
+{
+    // 1. Define input layer
+    appendNeuronLayer(inputLayerNeuronCount);
+
+    // 2. Define some hidden layers
+    for (size_t hiddenLayerIndex = 0; hiddenLayerIndex < hiddenLayerCount; hiddenLayerIndex++)
+    {
+        appendNeuronLayer(hiddenLayerNeuronCount);
+    }
+    
+    // 3. Define output layer
+    appendNeuronLayer(outputLayerNeuronCount);
+
+    connectLayers();
+}
+
 void NeuralNetwork::compute()
 {
     for (auto & neuronLayer : myNeuronLayers)
