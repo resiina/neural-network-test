@@ -121,18 +121,30 @@ int main()
                 std::cout << std::endl << std::endl;
             }
 
-            // Copy best network everywhere
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
                 
-                network = bestNetwork;
-
-                if (networkIndex != bestNetworkIndex)
+                if (networkIndex == bestNetworkIndex)
                 {
+                    // Keep the best one from last generation as it is
+                    continue;
+                }
+
+                if (networkIndex <= networksPerGeneration / 2)
+                {
+                    // Copy best network to half of the population
+                    network = bestNetwork;
+
                     // Mutate values a bit
                     const double mutationStrength = 0.01;
                     network.mutate(mutationStrength);
+                }
+                else
+                {
+                    // Generate totally new ones for the other half of the population
+                    network = NeuralNetwork();
+                    network.initialize(inputImageWidth * inputImageHeight, 10, 2, 16);
                 }
             }
         }
