@@ -38,6 +38,7 @@ int main()
     try
     {
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
+        std::cout << std::setprecision(2);
 
         // -----------------------------------------------------
         const unsigned int inputImageWidth = 28;
@@ -66,8 +67,6 @@ int main()
         trainingDataCollection->collect("../../data/training/");
 
         printSectionTitle("Train the network");
-
-        //network.train(trainingDataCollection);
         
         const size_t totalGenerations = 10000;
 
@@ -88,8 +87,6 @@ int main()
                     const auto & trainingExampleActivations = trainingDataCollection->getLabelsTrainingData()[0]->trainingExamples[trainingExampleIndex]->inputLayerActivations;
 
                     network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
-                
-                    std::cout << std::setprecision(2);
 
                     // 2. Compute results
                     network.compute();
@@ -107,7 +104,7 @@ int main()
                 }
             }
 
-            NeuralNetwork bestNetwork = networks.at(bestNetworkIndex);
+            NeuralNetwork bestNetwork = networks.at(bestNetworkIndex); // TODO: Do deep copy
             if (generation == 1 ||
                 generation == totalGenerations ||
                 generation % 50 == 0)
