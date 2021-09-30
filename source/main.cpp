@@ -47,8 +47,6 @@ int main()
         using std::chrono::duration;
         using std::chrono::milliseconds;
 
-        const auto timeStart = high_resolution_clock::now();
-
         // -----------------------------------------------------
         const unsigned int inputImageWidth = 28;
         const unsigned int inputImageHeight = 28;
@@ -84,6 +82,8 @@ int main()
         trainingDataCollection->collect("../../data/training/");
 
         printSectionTitle("Train the network");
+
+        const auto timeStart = high_resolution_clock::now();
         
         const size_t totalGenerations = 45000;
         for (int generation = 1; generation <= totalGenerations; generation++)
