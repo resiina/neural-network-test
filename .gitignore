@@ -1,2 +1,3 @@
 build
 .vscode
+mnist_png/*

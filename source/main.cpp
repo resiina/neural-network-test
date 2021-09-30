@@ -79,7 +79,7 @@ int main()
         printSectionTitle("Collect training data");
         
         std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
-        trainingDataCollection->collect("../../data/training/");
+        trainingDataCollection->collect("../../mnist_png/training/");
 
         printSectionTitle("Train the network");
 
