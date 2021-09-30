@@ -1,3 +1,6 @@
 [submodule "external/lodepng"]
 	path = external/lodepng
 	url = https://github.com/lvandeve/lodepng.git
+[submodule "external/mnist_png"]
+	path = external/mnist_png
+	url = https://github.com/myleott/mnist_png.git
