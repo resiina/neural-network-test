@@ -4,6 +4,8 @@
 #include <limits>
 #include <chrono>
 #include <ctime>
+#include <thread>
+#include <future>
 
 #include "lodepng.h"
 
@@ -33,6 +35,34 @@ void printSectionTitle(const std::string & sectionTitle)
     cout << horizontalLine << endl << endl;
 
     sectionNumber++;
+}
+
+double trainNetwork(NeuralNetwork & network, TrainingDataCollection * trainingDataCollection)
+{
+    double totalExamplesCost = std::numeric_limits<double>::max();
+
+    for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
+    {
+        // 1. Get a random image of random number between 0-10
+        const size_t trainingExampleActualNumber = std::rand() % 10;
+        const auto & trainingExamples = trainingDataCollection->getLabelsTrainingData()[trainingExampleActualNumber]->trainingExamples;
+
+        const size_t trainingExampleIndex = std::rand() % trainingExamples.size();
+        const auto & trainingExampleActivations = trainingExamples[trainingExampleIndex]->inputLayerActivations;
+
+        network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
+
+        // 2. Compute results
+        network.compute();
+
+        // 3. Compare output to goal
+        const auto & goalOutputActivations = trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
+
+        const double cost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), goalOutputActivations);
+        totalExamplesCost += cost;
+    }
+
+    return totalExamplesCost;
 }
 
 int main()
@@ -84,41 +114,27 @@ int main()
         printSectionTitle("Train the network");
 
         const auto timeStart = high_resolution_clock::now();
-        
+
+        std::vector<std::future<double>> networkCostFutures(networks.size());
+
         const size_t totalGenerations = 45000;
         for (int generation = 1; generation <= totalGenerations; generation++)
         {
-            size_t bestNetworkIndex = 0;
-            double bestNetworkCost = std::numeric_limits<double>::max();
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
+                networkCostFutures[networkIndex] = std::async(trainNetwork, network, trainingDataCollection.get());
+            }
 
-                double totalExamplesCost = std::numeric_limits<double>::max();
-                for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
+            size_t bestNetworkIndex = 0;
+            double bestNetworkCost = std::numeric_limits<double>::max();
+            for (size_t networkIndex = 0; networkIndex < networkCostFutures.size(); networkIndex++)
+            {
+                double networkCost = networkCostFutures.at(networkIndex).get();
+
+                if (networkCost < bestNetworkCost)
                 {
-                    // 1. Get a random image of random number between 0-10
-                    const size_t trainingExampleActualNumber = std::rand() % 10;
-                    const auto & trainingExamples = trainingDataCollection->getLabelsTrainingData()[trainingExampleActualNumber]->trainingExamples;
-
-                    const size_t trainingExampleIndex = std::rand() % trainingExamples.size();
-                    const auto & trainingExampleActivations = trainingExamples[trainingExampleIndex]->inputLayerActivations;
-
-                    network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
-
-                    // 2. Compute results
-                    network.compute();
-
-                    // 3. Compare output to goal
-                    const auto & goalOutputActivations = trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
-
-                    const double cost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), goalOutputActivations);
-                    totalExamplesCost += cost;
-                }
-
-                if (totalExamplesCost < bestNetworkCost)
-                {
-                    bestNetworkCost = totalExamplesCost;
+                    bestNetworkCost = networkCost;
                     bestNetworkIndex = networkIndex;
                 }
             }
