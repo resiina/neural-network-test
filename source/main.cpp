@@ -77,7 +77,8 @@ int main()
         using std::chrono::duration;
         using std::chrono::milliseconds;
 
-        // -----------------------------------------------------
+        // Input layer takes all image pixels as activations
+        // Network outputs 10 different possible results, an integer from 0 to 9
         const unsigned int inputImageWidth = 28;
         const unsigned int inputImageHeight = 28;
 
@@ -94,17 +95,12 @@ int main()
         for (int networkIndex = 0; networkIndex < networksPerGeneration; networkIndex++)
         {
             NeuralNetwork network;
-
-            // Input layer takes all image pixels as activations
-            // Network outputs 10 different possible results, an integer from 0 to 9
             network.initialize(inputLayerNeuronCount,
                                outputLayerNeuronCount,
                                hiddenLayerCount,
                                hiddenLayerNeuronCount);
-
             networks.push_back(network);
         }
-        
 
         printSectionTitle("Collect training data");
         
@@ -130,8 +126,7 @@ int main()
             double bestNetworkCost = std::numeric_limits<double>::max();
             for (size_t networkIndex = 0; networkIndex < networkCostFutures.size(); networkIndex++)
             {
-                double networkCost = networkCostFutures.at(networkIndex).get();
-
+                const double networkCost = networkCostFutures.at(networkIndex).get();
                 if (networkCost < bestNetworkCost)
                 {
                     bestNetworkCost = networkCost;
@@ -164,10 +159,10 @@ int main()
                 std::cout << "Output layer activations for actual number " << testingActualNumber << ":" << std::endl;
                 
                 const auto & outputLayerNeurons = bestNetwork.getLastNeuronLayer()->getNeurons();
-                for (size_t i = 0; i < outputLayerNeurons.size(); i++)
+                for (size_t neuronIndex = 0; neuronIndex < outputLayerNeurons.size(); neuronIndex++)
                 {
-                    const auto & outputNeuron = outputLayerNeurons.at(i);
-                    std::cout << i << ": " << outputNeuron->getActivation() << std::endl;
+                    const auto & outputNeuron = outputLayerNeurons.at(neuronIndex);
+                    std::cout << neuronIndex << ": " << outputNeuron->getActivation() << std::endl;
                 }
                 
                 std::cout << std::endl << std::endl;
@@ -197,7 +192,7 @@ int main()
 
                 if (networkIndex >= networksPerGeneration / 5)
                 {
-                    // Copy best network to 4/5 of the population
+                    // Copy the best network to 4/5 of the population
                     network = bestNetwork;
 
                     // Mutate values a bit
