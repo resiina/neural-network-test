@@ -37,9 +37,11 @@ void printSectionTitle(const std::string & sectionTitle)
     sectionNumber++;
 }
 
-void printTimeSince(const std::chrono::steady_clock::time_point & timeStart)
+void printTimeSinceStart()
 {
     using namespace std::chrono;
+    
+    const static auto timeStart = std::chrono::high_resolution_clock::now();
 
     // Show seconds since starting the program
     const auto timeNow = high_resolution_clock::now();
@@ -166,8 +168,7 @@ int main()
         trainingDataCollection->collect("../../mnist_png/training/");
 
         printSectionTitle("Train the network");
-
-        const auto timeStart = std::chrono::high_resolution_clock::now();
+        printTimeSinceStart();
 
         std::vector<std::future<double>> networkCostFutures(networks.size());
 
@@ -200,7 +201,7 @@ int main()
                 // Test the best performing network
                 std::cout << "Generation " << generation << " results" << std::endl;
                 testNetwork(bestNetwork, trainingDataCollection);
-                printTimeSince(timeStart);
+                printTimeSinceStart();
             }
 
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
