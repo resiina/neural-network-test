@@ -74,10 +74,9 @@ void printActivations(const std::shared_ptr<NeuronLayer> & neuronLayer, const si
             std::string(activationWidth, '#') +
             std::string(width - activationWidth, ' ');
 
-        std::cout << (neuronIndex == actualNumber ?
-                      dye::green(neuronIndex) :
-                      dye::red(neuronIndex));
-        std::cout << ": [" << activationString << "] " << activation << std::endl;
+        std::cout << (neuronIndex == actualNumber ? hue::green : hue::red);
+        std::cout << neuronIndex << ": [" << activationString << "] " << activation << std::endl;
+        std::cout << hue::reset;
     }
 }
 
