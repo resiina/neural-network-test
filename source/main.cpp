@@ -54,7 +54,7 @@ void printTimeSince(const std::chrono::steady_clock::time_point & timeStart)
     std::cout << std::endl << std::endl;
 }
 
-double trainNetwork(NeuralNetwork & network, TrainingDataCollection * trainingDataCollection)
+double trainNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
     double totalExamplesCost = 0;
 
@@ -131,7 +131,7 @@ int main()
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
-                networkCostFutures[networkIndex] = std::async(trainNetwork, network, trainingDataCollection.get());
+                networkCostFutures[networkIndex] = std::async(trainNetwork, network, trainingDataCollection);
             }
 
             size_t bestNetworkIndex = 0;
