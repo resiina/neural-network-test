@@ -24,8 +24,13 @@ in repository root directory to build the executable.
 
 ## How to run
 
-Run
+When running the first time, extract the MNIST PNG data from the submodule by executing
+```
+./extract_mnist_png
+```
+
+To run the application executable, run
 ```
 ./build/Release/NeuralNetworkTestApp.exe
 ```
-in repository root directory to run the executable.
+in repository root directory.
