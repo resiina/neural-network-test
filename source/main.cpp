@@ -54,6 +54,25 @@ void printTimeSince(const std::chrono::steady_clock::time_point & timeStart)
     std::cout << std::endl << std::endl;
 }
 
+void printActivations(const std::shared_ptr<NeuronLayer> & neuronLayer, size_t width)
+{
+    const auto & neurons = neuronLayer->getNeurons();
+
+    for (size_t neuronIndex = 0; neuronIndex < neurons.size(); neuronIndex++)
+    {
+        const auto & neuron = neurons.at(neuronIndex);
+        // Clamp activation between 0 and 1
+        double activation = std::clamp(neuron->getActivation(), 0., 1.);
+        size_t activationWidth = (size_t) std::round(width * activation);
+
+        std::string activationString =
+            std::string(activationWidth, '#') +
+            std::string(width - activationWidth, ' ');
+
+        std::cout << neuronIndex << ": [" << activationString << "] " << activation << std::endl;
+    }
+}
+
 double trainNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
     double totalExamplesCost = 0;
@@ -80,6 +99,33 @@ double trainNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataC
     }
 
     return totalExamplesCost;
+}
+
+void testNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataCollection> & testingDataCollection)
+{
+    // Setup a test for the network
+    const size_t testingActualNumber = std::rand() % 10;
+    const auto & testingExamples = testingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
+    const size_t testingExampleIndex = std::rand() % testingExamples.size();
+    const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
+
+    network.getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
+
+    // Execute test
+    network.compute();
+
+    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
+
+    const double testExampleCost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
+
+    // Show performance of the network
+    std::cout << "Network cost: " << testExampleCost << std::endl;
+    std::cout << "Output layer activations for actual number " << testingActualNumber << ":" << std::endl;
+
+    const auto & outputLayer = network.getLastNeuronLayer();
+    printActivations(outputLayer, 20);
+    
+    std::cout << std::endl << std::endl;
 }
 
 int main()
@@ -151,34 +197,9 @@ int main()
                 generation == totalGenerations ||
                 generation % 50 == 0)
             {
-                // Setup a test for the best performing network
-                const size_t testingActualNumber = std::rand() % 10;
-                const auto & testingExamples = trainingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
-                const size_t testingExampleIndex = std::rand() % testingExamples.size();
-                const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
-
-                bestNetwork.getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
-
-                // Execute test
-                bestNetwork.compute();
-
-                const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
-
-                const double testExampleCost = NeuralNetwork::calculateCost(bestNetwork.getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
-
-                // Show performance of current best network
-                std::cout << "Best cost of generation " << generation << ": " << testExampleCost << std::endl;
-                std::cout << "Output layer activations for actual number " << testingActualNumber << ":" << std::endl;
-                
-                const auto & outputLayerNeurons = bestNetwork.getLastNeuronLayer()->getNeurons();
-                for (size_t neuronIndex = 0; neuronIndex < outputLayerNeurons.size(); neuronIndex++)
-                {
-                    const auto & outputNeuron = outputLayerNeurons.at(neuronIndex);
-                    std::cout << neuronIndex << ": " << outputNeuron->getActivation() << std::endl;
-                }
-                
-                std::cout << std::endl << std::endl;
-
+                // Test the best performing network
+                std::cout << "Generation " << generation << " results" << std::endl;
+                testNetwork(bestNetwork, trainingDataCollection);
                 printTimeSince(timeStart);
             }
 
