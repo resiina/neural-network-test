@@ -39,7 +39,7 @@ void printSectionTitle(const std::string & sectionTitle)
 
 double trainNetwork(NeuralNetwork & network, TrainingDataCollection * trainingDataCollection)
 {
-    double totalExamplesCost = std::numeric_limits<double>::max();
+    double totalExamplesCost = 0;
 
     for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
     {
