@@ -37,6 +37,23 @@ void printSectionTitle(const std::string & sectionTitle)
     sectionNumber++;
 }
 
+void printTimeSince(const std::chrono::steady_clock::time_point & timeStart)
+{
+    using namespace std::chrono;
+
+    // Show seconds since starting the program
+    const auto timeNow = high_resolution_clock::now();
+    auto seconds = duration_cast<std::chrono::seconds>(timeNow - timeStart);
+    std::cout << seconds.count() << " seconds since start" << std::endl;
+
+    // Show current date and time
+    auto now = std::chrono::system_clock::now();
+    std::time_t currentDateTime = std::chrono::system_clock::to_time_t(now);
+    std::cout << std::ctime(&currentDateTime) << std::endl;
+
+    std::cout << std::endl << std::endl;
+}
+
 double trainNetwork(NeuralNetwork & network, TrainingDataCollection * trainingDataCollection)
 {
     double totalExamplesCost = 0;
@@ -71,11 +88,6 @@ int main()
     {
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
         std::cout << std::setprecision(2);
-        
-        using std::chrono::high_resolution_clock;
-        using std::chrono::duration_cast;
-        using std::chrono::duration;
-        using std::chrono::milliseconds;
 
         // Input layer takes all image pixels as activations
         // Network outputs 10 different possible results, an integer from 0 to 9
@@ -109,7 +121,7 @@ int main()
 
         printSectionTitle("Train the network");
 
-        const auto timeStart = high_resolution_clock::now();
+        const auto timeStart = std::chrono::high_resolution_clock::now();
 
         std::vector<std::future<double>> networkCostFutures(networks.size());
 
@@ -167,17 +179,7 @@ int main()
                 
                 std::cout << std::endl << std::endl;
 
-                // Show seconds since starting the program
-                const auto timeNow = high_resolution_clock::now();
-                auto seconds = duration_cast<std::chrono::seconds>(timeNow - timeStart);
-                std::cout << seconds.count() << " seconds since start" << std::endl;
-
-                // Show current date and time
-                auto now = std::chrono::system_clock::now();
-                std::time_t currentDateTime = std::chrono::system_clock::to_time_t(now);
-                std::cout << std::ctime(&currentDateTime) << std::endl;
-
-                std::cout << std::endl << std::endl;
+                printTimeSince(timeStart);
             }
 
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
