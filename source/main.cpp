@@ -86,7 +86,7 @@ int main()
                 // Test the best performing network
                 size_t testingActualNumber = 0;
                 const double testExampleCost = bestNetwork.test(trainingDataCollection, testingActualNumber);
-                printNetworkResults(generation, testExampleCost, bestNetwork.getLastNeuronLayer(), 20, testingActualNumber);
+                printNetworkResults(generation, testExampleCost, bestNetwork.getLastNeuronLayer(), testingActualNumber);
                 printTimeSinceStart();
             }
 

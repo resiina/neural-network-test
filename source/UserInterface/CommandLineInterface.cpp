@@ -52,8 +52,8 @@ void printTimeSinceStart()
 void printNetworkResults(const int generation,
                          const double cost,
                          const std::shared_ptr<NeuronLayer> & neuronLayer,
-                         const size_t width,
-                         const size_t actualNumber)
+                         const size_t actualNumber,
+                         const size_t width /* = 20 */)
 {    
     // Show performance of the network
     std::cout << "Generation " << generation << " results" << std::endl;
