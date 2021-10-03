@@ -52,6 +52,9 @@ int main()
         printSectionTitle("Collect training data");
         std::shared_ptr<DataCollection> trainingDataCollection = std::make_shared<DataCollection>("../../mnist_png/training/");
 
+        printSectionTitle("Collect testing data");
+        std::shared_ptr<DataCollection> testingDataCollection = std::make_shared<DataCollection>("../../mnist_png/testing/");
+
         printSectionTitle("Start neuroevolution");
         printTimeSinceStart();
 
@@ -83,7 +86,7 @@ int main()
             {
                 // Test the best performing network
                 size_t testingActualNumber = 0;
-                const double testExampleCost = bestNetwork.test(trainingDataCollection, testingActualNumber);
+                const double testExampleCost = bestNetwork.test(testingDataCollection, testingActualNumber);
                 printNetworkResults(generation, testExampleCost, bestNetwork.getLastNeuronLayer(), testingActualNumber);
                 printTimeSinceStart();
             }
