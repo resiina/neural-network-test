@@ -130,35 +130,37 @@ void NeuralNetwork::mutate(const double factor)
     }
 }
 
-void NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
+double NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
 {
-    std::shared_ptr<NeuronLayer> inputLayer = getFirstNeuronLayer();
+    double totalExamplesCost = 0;
 
-    const std::vector<std::shared_ptr<LabelTrainingData>> & labelsTrainingData = trainingDataCollection->getLabelsTrainingData();
-    for (const auto & labelTrainingData : labelsTrainingData)
+    for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
     {
-        for (const auto & trainingExample : labelTrainingData->trainingExamples)
-        {
-            // 1. Set input layer activations based on input image
-            inputLayer->setActivations(trainingExample->inputLayerActivations);
-
-            // 2. Compute results
-            compute();
-
-            // 3. Calculate output cost
-            const double cost = calculateCost(getLastNeuronLayer()->getActivations(),
-                                              trainingExample->goalOutputLayerActivations);
-
-            std::cout << "Cost: " << cost << std::endl;
-
-            // TODO:
-            // 4. Do back propagation
-        }
-
-        // TODO:
-        // - Calculate the gradient descent
-        // - Adjust the weights and biases according to the gradient
+        size_t testingActualNumber = 0; // Dummy
+        totalExamplesCost += test(trainingDataCollection, testingActualNumber);
     }
+
+    return totalExamplesCost;
+}
+    
+double NeuralNetwork::test(const std::shared_ptr<TrainingDataCollection> & testingDataCollection, size_t & testingActualNumber)
+{
+    // Setup a test for the network
+    testingActualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
+    const auto & testingExamples = testingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
+    const size_t testingExampleIndex = std::rand() % testingExamples.size();
+    const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
+
+    getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
+
+    // Execute test
+    compute();
+
+    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
+
+    const double testExampleCost = NeuralNetwork::calculateCost(getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
+
+    return testExampleCost;
 }
 
 void NeuralNetwork::operator=(const NeuralNetwork & other)

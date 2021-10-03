@@ -33,7 +33,8 @@ public:
 
     void mutate(const double factor);
 
-    void train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
+    double train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection);
+    double test(const std::shared_ptr<TrainingDataCollection> & testingDataCollection, size_t & testingActualNumber);
 
     // Deep copy
     void operator=(const NeuralNetwork & other);

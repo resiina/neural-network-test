@@ -2,15 +2,11 @@
 #include <iomanip>
 #include <filesystem>
 #include <limits>
-#include <chrono>
 #include <ctime>
 #include <thread>
 #include <future>
 
 #include "lodepng.h"
-
-#define NOMINMAX // rang.hpp includes some windows stuff, so this is required for numeric_limits::max to work
-#include "rang.hpp"
 
 #include "NeuralNetwork.h"
 #include "NeuronLayer.h"
@@ -18,127 +14,13 @@
 
 #include "TrainingDataCollection.h"
 
-void printSectionTitle(const std::string & sectionTitle)
-{
-    using namespace std;
-
-    static unsigned int sectionNumber = 1;
-    const string finalSectionTitle = to_string(sectionNumber) + ". " + sectionTitle;
-
-    const string horizontalLine = "  " + string(finalSectionTitle.length() + 4, '#');
-    const string spacingRow = "  # " + string(finalSectionTitle.length(), ' ') + " #";
-    const string sectionRow = "  # " + finalSectionTitle + " #";
-    
-    cout << string(70, '_') << endl << endl; // Section separator line
-
-    cout << horizontalLine << endl;
-    cout << spacingRow << endl;
-    cout << sectionRow << endl;
-    cout << spacingRow << endl;
-    cout << horizontalLine << endl << endl;
-
-    sectionNumber++;
-}
-
-void printTimeSinceStart()
-{
-    using namespace std::chrono;
-    
-    const static auto timeStart = std::chrono::high_resolution_clock::now();
-
-    // Show seconds since starting the program
-    const auto timeNow = high_resolution_clock::now();
-    auto seconds = duration_cast<std::chrono::seconds>(timeNow - timeStart);
-    std::cout << seconds.count() << " seconds since start" << std::endl;
-
-    // Show current date and time
-    auto now = std::chrono::system_clock::now();
-    std::time_t currentDateTime = std::chrono::system_clock::to_time_t(now);
-    std::cout << std::ctime(&currentDateTime) << std::endl;
-
-    std::cout << std::endl << std::endl;
-}
-
-void printActivations(const std::shared_ptr<NeuronLayer> & neuronLayer, const size_t width, const size_t actualNumber)
-{
-    const auto & neurons = neuronLayer->getNeurons();
-
-    for (size_t neuronIndex = 0; neuronIndex < neurons.size(); neuronIndex++)
-    {
-        const auto & neuron = neurons.at(neuronIndex);
-        // Clamp activation between 0 and 1
-        double activation = std::clamp(neuron->getActivation(), 0., 1.);
-        size_t activationWidth = (size_t) std::round(width * activation);
-
-        std::string activationString =
-            std::string(activationWidth, '#') +
-            std::string(width - activationWidth, ' ');
-
-        std::cout << (neuronIndex == actualNumber ? rang::fg::green : rang::fg::red);
-        std::cout << neuronIndex << ": [" << activationString << "] " << activation << std::endl;
-        std::cout << rang::style::reset;
-    }
-}
-
-double trainNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
-{
-    double totalExamplesCost = 0;
-
-    for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
-    {
-        // 1. Get a random image of random number between 0-10
-        const size_t trainingExampleActualNumber = std::rand() % 10;
-        const auto & trainingExamples = trainingDataCollection->getLabelsTrainingData()[trainingExampleActualNumber]->trainingExamples;
-
-        const size_t trainingExampleIndex = std::rand() % trainingExamples.size();
-        const auto & trainingExampleActivations = trainingExamples[trainingExampleIndex]->inputLayerActivations;
-
-        network.getFirstNeuronLayer()->setActivations(trainingExampleActivations);
-
-        // 2. Compute results
-        network.compute();
-
-        // 3. Compare output to goal
-        const auto & goalOutputActivations = trainingExamples[trainingExampleIndex]->goalOutputLayerActivations;
-
-        const double cost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), goalOutputActivations);
-        totalExamplesCost += cost;
-    }
-
-    return totalExamplesCost;
-}
-
-void testNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataCollection> & testingDataCollection)
-{
-    // Setup a test for the network
-    const size_t testingActualNumber = std::rand() % 10;
-    const auto & testingExamples = testingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
-    const size_t testingExampleIndex = std::rand() % testingExamples.size();
-    const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
-
-    network.getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
-
-    // Execute test
-    network.compute();
-
-    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
-
-    const double testExampleCost = NeuralNetwork::calculateCost(network.getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
-
-    // Show performance of the network
-    std::cout << "Network cost: " << testExampleCost << std::endl;
-    std::cout << "Output layer activations for actual number " << rang::fg::green << testingActualNumber << rang::style::reset << ":" << std::endl;
-
-    const auto & outputLayer = network.getLastNeuronLayer();
-    printActivations(outputLayer, 20, testingActualNumber);
-    
-    std::cout << std::endl << std::endl;
-}
+#include "CommandLineInterface.h"
 
 int main()
 {
     try
     {
+        // Basic initializations
         std::srand(static_cast<unsigned int>(std::time(nullptr)));
         std::cout << std::setprecision(2);
 
@@ -182,7 +64,7 @@ int main()
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
-                networkCostFutures[networkIndex] = std::async(trainNetwork, network, trainingDataCollection);
+                networkCostFutures[networkIndex] = std::async(&NeuralNetwork::train, network, trainingDataCollection);
             }
 
             size_t bestNetworkIndex = 0;
@@ -202,8 +84,9 @@ int main()
                 generation % 50 == 0)
             {
                 // Test the best performing network
-                std::cout << "Generation " << generation << " results" << std::endl;
-                testNetwork(bestNetwork, trainingDataCollection);
+                size_t testingActualNumber = 0;
+                const double testExampleCost = bestNetwork.test(trainingDataCollection, testingActualNumber);
+                printNetworkResults(generation, testExampleCost, bestNetwork.getLastNeuronLayer(), 20, testingActualNumber);
                 printTimeSinceStart();
             }
 
