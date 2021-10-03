@@ -177,8 +177,7 @@ int main()
 
         std::vector<std::future<double>> networkCostFutures(networks.size());
 
-        const size_t totalGenerations = 45000;
-        for (int generation = 1; generation <= totalGenerations; generation++)
+        for (int generation = 1; true; generation++)
         {
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
@@ -200,7 +199,6 @@ int main()
 
             NeuralNetwork bestNetwork = networks.at(bestNetworkIndex);
             if (generation == 1 ||
-                generation == totalGenerations ||
                 generation % 50 == 0)
             {
                 // Test the best performing network
