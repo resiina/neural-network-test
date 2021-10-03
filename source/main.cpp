@@ -82,7 +82,7 @@ int main()
         // 1. Set input layer activations based on input image
         std::shared_ptr<NeuronLayer> inputLayer = network.getFirstNeuronLayer();
 
-        const std::string testFilePath = "../../data/testing/0/3.png"; // This is an image representing number 0
+        const std::string testFilePath = "../../mnist_png/testing/0/3.png"; // This is an image representing number 0
         std::vector<unsigned char> testImageData;
         unsigned int testImageWidth;
         unsigned int testImageHeight;
