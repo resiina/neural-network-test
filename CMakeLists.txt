@@ -5,7 +5,7 @@ project(NeuralNetworkTest)
 aux_source_directory(source applicationSources)
 aux_source_directory(source/UserInterface applicationSources)
 aux_source_directory(source/NetworkStructure applicationSources)
-aux_source_directory(source/TrainingDataCollection applicationSources)
+aux_source_directory(source/DataCollection applicationSources)
 
 list(APPEND applicationIncludeDirectories
     source
@@ -13,7 +13,7 @@ list(APPEND applicationIncludeDirectories
     source/UserInterface
 
     source/NetworkStructure
-    source/TrainingDataCollection
+    source/DataCollection
 )
 
 list(APPEND externalSources

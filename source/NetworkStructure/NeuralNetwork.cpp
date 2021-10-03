@@ -3,7 +3,7 @@
 #include "NeuronLayer.h"
 #include "Neuron.h"
 
-#include "TrainingDataCollection.h"
+#include "DataCollection.h"
 
 #include <stdexcept>
 #include <iostream>
@@ -130,7 +130,7 @@ void NeuralNetwork::mutate(const double factor)
     }
 }
 
-double NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trainingDataCollection)
+double NeuralNetwork::train(const std::shared_ptr<DataCollection> & trainingDataCollection)
 {
     double totalExamplesCost = 0;
 
@@ -143,11 +143,11 @@ double NeuralNetwork::train(const std::shared_ptr<TrainingDataCollection> & trai
     return totalExamplesCost;
 }
     
-double NeuralNetwork::test(const std::shared_ptr<TrainingDataCollection> & testingDataCollection, size_t & testingActualNumber)
+double NeuralNetwork::test(const std::shared_ptr<DataCollection> & testingDataCollection, size_t & testingActualNumber)
 {
     // Setup a test for the network
     testingActualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
-    const auto & testingExamples = testingDataCollection->getLabelsTrainingData()[testingActualNumber]->trainingExamples;
+    const auto & testingExamples = testingDataCollection->getLabelsData()[testingActualNumber]->examples;
     const size_t testingExampleIndex = std::rand() % testingExamples.size();
     const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
 

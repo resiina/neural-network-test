@@ -12,7 +12,7 @@
 #include "NeuronLayer.h"
 #include "Neuron.h"
 
-#include "TrainingDataCollection.h"
+#include "DataCollection.h"
 
 #include "CommandLineInterface.h"
 
@@ -50,9 +50,7 @@ int main()
         }
 
         printSectionTitle("Collect training data");
-        
-        std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
-        trainingDataCollection->collect("../../mnist_png/training/");
+        std::shared_ptr<DataCollection> trainingDataCollection = std::make_shared<DataCollection>("../../mnist_png/training/");
 
         printSectionTitle("Start neuroevolution");
         printTimeSinceStart();
