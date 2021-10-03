@@ -136,34 +136,34 @@ double NeuralNetwork::train(const std::shared_ptr<DataCollection> & trainingData
 
     for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
     {
-        size_t testingActualNumber = 0; // Dummy
-        totalExamplesCost += test(trainingDataCollection, testingActualNumber);
+        size_t actualNumber = 0; // Dummy
+        totalExamplesCost += test(trainingDataCollection, actualNumber);
     }
 
     return totalExamplesCost;
 }
     
-double NeuralNetwork::test(const std::shared_ptr<DataCollection> & testingDataCollection, size_t & testingActualNumber)
+double NeuralNetwork::test(const std::shared_ptr<DataCollection> & dataCollection, size_t & actualNumber)
 {
     // Setup a test for the network
-    testingActualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
-    const auto & testingExamples = testingDataCollection->getLabelsData()[testingActualNumber]->examples;
-    const size_t testingExampleIndex = std::rand() % testingExamples.size();
-    const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
+    actualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
+    const auto & examples = dataCollection->getLabelsData()[actualNumber]->examples;
+    const size_t exampleIndex = std::rand() % examples.size();
+    const auto & exampleInputActivations = examples[exampleIndex]->inputLayerActivations;
 
     // Inputs
-    getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
+    getFirstNeuronLayer()->setActivations(exampleInputActivations);
     
     // Expected outputs
-    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
+    const auto & exampleGoalActivations = examples[exampleIndex]->goalOutputLayerActivations;
 
     // Execute test
     compute();
 
     // Check results
-    const double testExampleCost = NeuralNetwork::calculateCost(getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
+    const double exampleCost = calculateCost(getLastNeuronLayer()->getActivations(), exampleGoalActivations);
 
-    return testExampleCost;
+    return exampleCost;
 }
 
 void NeuralNetwork::operator=(const NeuralNetwork & other)
