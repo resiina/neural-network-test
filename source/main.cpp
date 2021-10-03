@@ -9,8 +9,8 @@
 
 #include "lodepng.h"
 
-#define NOMINMAX // color.hpp includes some windows stuff, so this is required for numeric_limits::max to work
-#include "color.hpp"
+#define NOMINMAX // rang.hpp includes some windows stuff, so this is required for numeric_limits::max to work
+#include "rang.hpp"
 
 #include "NeuralNetwork.h"
 #include "NeuronLayer.h"
@@ -74,9 +74,9 @@ void printActivations(const std::shared_ptr<NeuronLayer> & neuronLayer, const si
             std::string(activationWidth, '#') +
             std::string(width - activationWidth, ' ');
 
-        std::cout << (neuronIndex == actualNumber ? hue::green : hue::red);
+        std::cout << (neuronIndex == actualNumber ? rang::fg::green : rang::fg::red);
         std::cout << neuronIndex << ": [" << activationString << "] " << activation << std::endl;
-        std::cout << hue::reset;
+        std::cout << rang::style::reset;
     }
 }
 
@@ -127,7 +127,7 @@ void testNetwork(NeuralNetwork & network, const std::shared_ptr<TrainingDataColl
 
     // Show performance of the network
     std::cout << "Network cost: " << testExampleCost << std::endl;
-    std::cout << "Output layer activations for actual number " << dye::green(testingActualNumber) << ":" << std::endl;
+    std::cout << "Output layer activations for actual number " << rang::fg::green << testingActualNumber << rang::style::reset << ":" << std::endl;
 
     const auto & outputLayer = network.getLastNeuronLayer();
     printActivations(outputLayer, 20, testingActualNumber);

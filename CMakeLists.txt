@@ -18,7 +18,7 @@ list(APPEND externalSources
 
 list(APPEND externalIncludeDirectories
     external/lodepng
-    external/color-console/include
+    external/rang/include
 )
 
 add_executable(NeuralNetworkTestApp

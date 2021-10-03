@@ -4,6 +4,6 @@
 [submodule "external/mnist_png"]
 	path = external/mnist_png
 	url = https://github.com/myleott/mnist_png.git
-[submodule "external/color-console"]
-	path = external/color-console
-	url = https://github.com/imfl/color-console
+[submodule "external/rang"]
+	path = external/rang
+	url = https://github.com/agauniyal/rang.git
