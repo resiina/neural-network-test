@@ -1,0 +1,1 @@
+tar -xf external/mnist_png/mnist_png.tar.gz
