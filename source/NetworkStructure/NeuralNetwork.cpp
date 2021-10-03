@@ -151,13 +151,16 @@ double NeuralNetwork::test(const std::shared_ptr<TrainingDataCollection> & testi
     const size_t testingExampleIndex = std::rand() % testingExamples.size();
     const auto & testingExampleInputActivations = testingExamples[testingExampleIndex]->inputLayerActivations;
 
+    // Inputs
     getFirstNeuronLayer()->setActivations(testingExampleInputActivations);
+    
+    // Expected outputs
+    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
 
     // Execute test
     compute();
 
-    const auto & testingExampleGoalActivations = testingExamples[testingExampleIndex]->goalOutputLayerActivations;
-
+    // Check results
     const double testExampleCost = NeuralNetwork::calculateCost(getLastNeuronLayer()->getActivations(), testingExampleGoalActivations);
 
     return testExampleCost;
