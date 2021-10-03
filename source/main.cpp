@@ -34,7 +34,7 @@ int main()
         const size_t hiddenLayerCount = 2;
         const size_t hiddenLayerNeuronCount = 16;
 
-        printSectionTitle("Construct the network");
+        printSectionTitle("Construct the initial network population");
 
         const size_t networksPerGeneration = 20;
 
@@ -54,7 +54,7 @@ int main()
         std::shared_ptr<TrainingDataCollection> trainingDataCollection = std::make_shared<TrainingDataCollection>();
         trainingDataCollection->collect("../../mnist_png/training/");
 
-        printSectionTitle("Train the network");
+        printSectionTitle("Start neuroevolution");
         printTimeSinceStart();
 
         std::vector<std::future<double>> networkCostFutures(networks.size());

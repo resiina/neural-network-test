@@ -44,9 +44,7 @@ void printTimeSinceStart()
     // Show current date and time
     auto now = std::chrono::system_clock::now();
     std::time_t currentDateTime = std::chrono::system_clock::to_time_t(now);
-    std::cout << std::ctime(&currentDateTime) << std::endl;
-
-    std::cout << std::endl << std::endl;
+    std::cout << std::ctime(&currentDateTime) << std::endl << std::endl;
 }
 
 void printNetworkResults(const int generation,
