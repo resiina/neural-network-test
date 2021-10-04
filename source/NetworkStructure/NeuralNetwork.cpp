@@ -130,25 +130,27 @@ void NeuralNetwork::mutate(const double factor)
     }
 }
 
-double NeuralNetwork::train(const std::shared_ptr<DataCollection> & trainingDataCollection)
+double NeuralNetwork::train(const std::shared_ptr<DataCollection> & trainingDataCollection,
+                            const size_t actualNumber,
+                            const double exampleRelativePosition)
 {
     double totalExamplesCost = 0;
 
     for (int trainingExampleNumber = 0; trainingExampleNumber < 50; trainingExampleNumber++)
     {
-        size_t actualNumber = 0; // Dummy
-        totalExamplesCost += test(trainingDataCollection, actualNumber);
+        totalExamplesCost += test(trainingDataCollection, actualNumber, exampleRelativePosition);
     }
 
     return totalExamplesCost;
 }
     
-double NeuralNetwork::test(const std::shared_ptr<DataCollection> & dataCollection, size_t & actualNumber)
+double NeuralNetwork::test(const std::shared_ptr<DataCollection> & dataCollection,
+                           const size_t actualNumber,
+                           const double exampleRelativePosition)
 {
-    // Setup a test for the network
-    actualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
+    // Set up a test for the network
     const auto & examples = dataCollection->getLabelsData()[actualNumber]->examples;
-    const size_t exampleIndex = std::rand() % examples.size();
+    const size_t exampleIndex = static_cast<size_t>(std::floor(exampleRelativePosition * examples.size()));
     const auto & exampleInputActivations = examples[exampleIndex]->inputLayerActivations;
 
     // Inputs

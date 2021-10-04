@@ -62,10 +62,13 @@ int main()
 
         for (int generation = 1; true; generation++)
         {
+            const size_t exampleActualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
+            const double exampleRelativePosition = (std::rand() % 1000000000) / 1000000000.0; // Pick a random example image of the actual number
+
             for (size_t networkIndex = 0; networkIndex < networks.size(); networkIndex++)
             {
                 NeuralNetwork & network = networks.at(networkIndex);
-                networkCostFutures[networkIndex] = std::async(&NeuralNetwork::train, network, trainingDataCollection);
+                networkCostFutures[networkIndex] = std::async(&NeuralNetwork::train, network, trainingDataCollection, exampleActualNumber, exampleRelativePosition);
             }
 
             size_t bestNetworkIndex = 0;
@@ -85,8 +88,10 @@ int main()
                 generation % 50 == 0)
             {
                 // Test the best performing network
-                size_t testingActualNumber = 0;
-                const double testExampleCost = bestNetwork.test(testingDataCollection, testingActualNumber);
+                const size_t testingActualNumber = std::rand() % 10; // Pick a random number between 0-9 for the test case
+                const double testingRelativePosition = (std::rand() % 1000000000) / 1000000000.0; // Pick a random example image of the actual number
+
+                const double testExampleCost = bestNetwork.test(testingDataCollection, testingActualNumber, testingRelativePosition);
                 printNetworkResults(generation, testExampleCost, bestNetwork.getLastNeuronLayer(), testingActualNumber);
                 printTimeSinceStart();
             }
