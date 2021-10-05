@@ -41,11 +41,10 @@ int main()
         std::vector<NeuralNetwork> networks;
         for (int networkIndex = 0; networkIndex < networksPerGeneration; networkIndex++)
         {
-            NeuralNetwork network;
-            network.initialize(inputLayerNeuronCount,
-                               outputLayerNeuronCount,
-                               hiddenLayerCount,
-                               hiddenLayerNeuronCount);
+            NeuralNetwork network(inputLayerNeuronCount,
+                                  outputLayerNeuronCount,
+                                  hiddenLayerCount,
+                                  hiddenLayerNeuronCount);
             networks.push_back(network);
         }
 
@@ -118,11 +117,10 @@ int main()
                 else
                 {
                     // Generate totally new ones for the rest of the population
-                    network = NeuralNetwork();
-                    network.initialize(inputLayerNeuronCount,
-                                       outputLayerNeuronCount,
-                                       hiddenLayerCount,
-                                       hiddenLayerNeuronCount);
+                    network = NeuralNetwork(inputLayerNeuronCount,
+                                            outputLayerNeuronCount,
+                                            hiddenLayerCount,
+                                            hiddenLayerNeuronCount);
                 }
             }
         }

@@ -10,12 +10,10 @@ class DataCollection;
 class NeuralNetwork
 {
 public:
-    NeuralNetwork();
-
-    void initialize(const size_t inputLayerNeuronCount,
-                    const size_t outputLayerNeuronCount,
-                    const size_t hiddenLayerCount,
-                    const size_t hiddenLayerNeuronCount);
+    NeuralNetwork(const size_t inputLayerNeuronCount,
+                  const size_t outputLayerNeuronCount,
+                  const size_t hiddenLayerCount,
+                  const size_t hiddenLayerNeuronCount);
 
     void compute();
 
