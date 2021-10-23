@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <cmath>
 #include <algorithm>
 
 #include "NeuronLayer.h"

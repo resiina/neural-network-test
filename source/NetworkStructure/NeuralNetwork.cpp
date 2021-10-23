@@ -7,6 +7,7 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
 
 NeuralNetwork::NeuralNetwork(const size_t inputLayerNeuronCount,
                              const size_t outputLayerNeuronCount,
@@ -112,7 +113,7 @@ void NeuralNetwork::mutate(const double factor)
 
     for (size_t i = 0; i < myNeuronLayers.size(); i++)
     {
-        auto & neurons = myNeuronLayers.at(i)->getNeurons();
+        auto neurons = myNeuronLayers.at(i)->getNeurons();
         for (auto & neuron : neurons)
         {
             neuron->setBias(neuron->getBias() + getUnitMutator() * factor);
@@ -167,7 +168,7 @@ void NeuralNetwork::operator=(const NeuralNetwork & other)
 {
     myNeuronLayers.clear();
 
-    auto & otherNeuronLayers = other.getNeuronLayers();
+    auto otherNeuronLayers = other.getNeuronLayers();
     for (auto & otherNeuronLayer : otherNeuronLayers)
     {
         std::shared_ptr<NeuronLayer> neuronLayerCopy = std::make_shared<NeuronLayer>();
@@ -182,12 +183,12 @@ void NeuralNetwork::operator=(const NeuralNetwork & other)
     // Copy connection weights
     for (size_t neuronLayerIndex = 0; neuronLayerIndex < myNeuronLayers.size(); neuronLayerIndex++)
     {
-        auto & neurons = myNeuronLayers.at(neuronLayerIndex)->getNeurons();
-        auto & otherNeurons = otherNeuronLayers.at(neuronLayerIndex)->getNeurons();
+        auto neurons = myNeuronLayers.at(neuronLayerIndex)->getNeurons();
+        auto otherNeurons = otherNeuronLayers.at(neuronLayerIndex)->getNeurons();
         for (size_t neuronIndex = 0; neuronIndex < neurons.size(); neuronIndex++)
         {
-            auto & neuronConnections = neurons.at(neuronIndex)->getNextConnections();
-            auto & otherNeuronConnections = otherNeurons.at(neuronIndex)->getNextConnections();
+            auto neuronConnections = neurons.at(neuronIndex)->getNextConnections();
+            auto otherNeuronConnections = otherNeurons.at(neuronIndex)->getNextConnections();
             for (size_t connectionIndex = 0; connectionIndex < neuronConnections.size(); connectionIndex++)
             {
                 auto & neuronConnection = neuronConnections.at(connectionIndex);

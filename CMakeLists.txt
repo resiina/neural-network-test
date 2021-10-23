@@ -35,4 +35,8 @@ include_directories(NeuralNetworkTestApp
     ${externalIncludeDirectories}
 )
 
+target_link_libraries(NeuralNetworkTestApp
+    pthread
+)
+
 set_property(TARGET NeuralNetworkTestApp PROPERTY CXX_STANDARD 17)
